@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 import { AuthService } from '../../auth/auth.service';
+import { ThemeService } from '../../theme/theme.service';
 
 interface NavItem {
   readonly path: string;
@@ -18,9 +19,11 @@ interface NavItem {
 export class Shell {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  protected readonly theme = inject(ThemeService);
 
   protected readonly sidebarOpen = signal(true);
   protected readonly user = this.auth.user;
+  protected readonly isDark = computed(() => this.theme.theme() === 'dark');
   protected readonly displayRole = computed(() => {
     const u = this.user();
     if (!u) {
@@ -47,6 +50,10 @@ export class Shell {
 
   toggleSidebar(): void {
     this.sidebarOpen.update((open) => !open);
+  }
+
+  toggleTheme(): void {
+    this.theme.toggle();
   }
 
   logout(): void {

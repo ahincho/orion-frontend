@@ -1,7 +1,82 @@
 @use "tailwindcss";
 
-/* ORION global styles */
-:root {
-  color-scheme: light dark;
-}
+/*
+ * ORION theme system
+ * ---------------------------------------------------------------------------
+ * Tailwind v4 `dark:` variant is rebound to a `[data-theme="dark"]` selector
+ * on the root element. ThemeService toggles this attribute, so every `dark:`
+ * utility in the codebase reacts to the user-controlled theme (not the OS
+ * `prefers-color-scheme`). Default theme is `light`.
+ */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
+@layer base {
+  html,
+  body {
+    background-color: #f8fafc;
+    color: #0f172a;
+  }
+
+  [data-theme="dark"] html,
+  [data-theme="dark"] body {
+    background-color: #020617;
+    color: #f1f5f9;
+  }
+
+  /*
+   * Force explicit colors on form controls so the browser does not fall back
+   * to its native look (which becomes nearly invisible on dark systems).
+   */
+  input,
+  select,
+  textarea {
+    background-color: #ffffff;
+    color: #0f172a;
+    border-color: #cbd5e1;
+  }
+
+  [data-theme="dark"] input,
+  [data-theme="dark"] select,
+  [data-theme="dark"] textarea {
+    background-color: #1e293b;
+    color: #f1f5f9;
+    border-color: #334155;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #94a3b8;
+    opacity: 1;
+  }
+
+  [data-theme="dark"] input::placeholder,
+  [data-theme="dark"] textarea::placeholder {
+    color: #64748b;
+  }
+
+  /* Disable user-agent autofill yellow tint that breaks the palette. */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #0f172a;
+    box-shadow: 0 0 0 1000px #ffffff inset;
+    caret-color: #0f172a;
+  }
+
+  [data-theme="dark"] input:-webkit-autofill,
+  [data-theme="dark"] input:-webkit-autofill:hover,
+  [data-theme="dark"] input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #f1f5f9;
+    box-shadow: 0 0 0 1000px #1e293b inset;
+    caret-color: #f1f5f9;
+  }
+
+  /* Scrollbar styling parity. */
+  * {
+    scrollbar-color: #cbd5e1 transparent;
+  }
+
+  [data-theme="dark"] * {
+    scrollbar-color: #334155 transparent;
+  }
+}
