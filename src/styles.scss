@@ -54,21 +54,51 @@
     color: #64748b;
   }
 
-  /* Disable user-agent autofill yellow tint that breaks the palette. */
+  /*
+   * Override Chromium / WebKit autofill styles. Without !important the browser
+   * paints its own yellow/light-blue background and flips the text color to
+   * white for contrast, which breaks the dark theme palette. The long
+   * `transition` delay is a documented trick to defer Chrome's background-color
+   * change long enough that the user never sees it.
+   */
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
-  input:-webkit-autofill:focus {
-    -webkit-text-fill-color: #0f172a;
-    box-shadow: 0 0 0 1000px #ffffff inset;
-    caret-color: #0f172a;
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-text-fill-color: #0f172a !important;
+    -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+    box-shadow: 0 0 0 1000px #ffffff inset !important;
+    caret-color: #0f172a !important;
+    transition: background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s;
   }
 
   [data-theme="dark"] input:-webkit-autofill,
   [data-theme="dark"] input:-webkit-autofill:hover,
-  [data-theme="dark"] input:-webkit-autofill:focus {
-    -webkit-text-fill-color: #f1f5f9;
-    box-shadow: 0 0 0 1000px #1e293b inset;
-    caret-color: #f1f5f9;
+  [data-theme="dark"] input:-webkit-autofill:focus,
+  [data-theme="dark"] input:-webkit-autofill:active {
+    -webkit-text-fill-color: #f1f5f9 !important;
+    -webkit-box-shadow: 0 0 0 1000px #1e293b inset !important;
+    box-shadow: 0 0 0 1000px #1e293b inset !important;
+    caret-color: #f1f5f9 !important;
+    transition: background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s;
+  }
+
+  /*
+   * Belt-and-suspenders: keep explicit colors on the :focus state too so
+   * Signal Forms / browser focus styles cannot regress us to white-on-white.
+   */
+  input:focus,
+  select:focus,
+  textarea:focus {
+    background-color: #ffffff;
+    color: #0f172a;
+  }
+
+  [data-theme="dark"] input:focus,
+  [data-theme="dark"] select:focus,
+  [data-theme="dark"] textarea:focus {
+    background-color: #1e293b;
+    color: #f1f5f9;
   }
 
   /* Scrollbar styling parity. */
