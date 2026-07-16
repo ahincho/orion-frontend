@@ -1,0 +1,53 @@
+<div class="mx-auto max-w-6xl space-y-6">
+  <header class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+    <h1 class="text-2xl font-semibold tracking-tight text-slate-900">Bienvenido a ORION</h1>
+    <p class="mt-1 text-sm text-slate-600">
+      @if (user(); as currentUser) {
+        Hola, <span class="font-medium">{{ currentUser.name }}</span>. Estás autenticado como
+        <span class="font-medium">{{ currentUser.role }}</span>.
+      } @else {
+        Sesión iniciada.
+      }
+    </p>
+    <p class="mt-3 text-sm text-slate-600">
+      ORION es un Pequeño Sistema Cognitivo para distribuir la carga cognitiva entre el agente
+      computacional y el juicio humano. Selecciona un pilar para revisar las propuestas generadas
+      por el agente.
+    </p>
+  </header>
+
+  <section aria-labelledby="dashboard-pillars-title">
+    <h2 id="dashboard-pillars-title" class="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">
+      Pilares operativos
+    </h2>
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      @for (pillar of pillars; track pillar.path) {
+        <a
+          [routerLink]="pillar.path"
+          class="group flex flex-col rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-indigo-300 hover:shadow-md"
+        >
+          <span class="mb-3 inline-block h-1 w-10 rounded-full" [class]="pillar.accent" aria-hidden="true"></span>
+          <h3 class="text-base font-semibold text-slate-900 group-hover:text-indigo-700">{{ pillar.title }}</h3>
+          <p class="mt-2 flex-1 text-sm text-slate-600">{{ pillar.description }}</p>
+          <span class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-indigo-600">
+            Abrir
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </span>
+        </a>
+      }
+    </div>
+  </section>
+</div>

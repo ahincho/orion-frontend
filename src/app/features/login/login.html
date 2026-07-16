@@ -1,0 +1,95 @@
+<main class="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4">
+  <section
+    class="w-full max-w-md rounded-xl border border-slate-200 bg-white p-8 shadow-sm"
+    aria-labelledby="orion-login-title"
+  >
+    <header class="mb-6 text-center">
+      <div
+        class="mx-auto grid h-12 w-12 place-items-center rounded-lg bg-indigo-600 text-lg font-bold text-white"
+        aria-hidden="true"
+      >O</div>
+      <h1 id="orion-login-title" class="mt-3 text-2xl font-semibold tracking-tight text-slate-900">
+        Iniciar sesión
+      </h1>
+      <p class="mt-1 text-sm text-slate-500">
+        Pequeño Sistema Cognitivo ORION
+      </p>
+    </header>
+
+    <form (submit)="submit($event)" novalidate>
+      <div class="flex flex-col gap-4">
+        <label class="flex flex-col gap-1.5 text-sm">
+          <span class="font-medium text-slate-700">Correo electrónico</span>
+          <input
+            type="email"
+            autocomplete="username"
+            [formField]="loginForm.email"
+            class="rounded-md border border-slate-300 px-3 py-2 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 disabled:bg-slate-100"
+            [attr.aria-invalid]="loginForm.email().invalid() ? 'true' : 'false'"
+            aria-describedby="login-email-error"
+          />
+          @if (loginForm.email().errors()?.length && loginForm.email().touched()) {
+            <span id="login-email-error" class="text-xs text-red-600" role="alert">
+              {{ loginForm.email().errors()?.[0]?.message }}
+            </span>
+          }
+        </label>
+
+        <label class="flex flex-col gap-1.5 text-sm">
+          <span class="font-medium text-slate-700">Contraseña</span>
+          <input
+            type="password"
+            autocomplete="current-password"
+            [formField]="loginForm.password"
+            class="rounded-md border border-slate-300 px-3 py-2 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 disabled:bg-slate-100"
+            [attr.aria-invalid]="loginForm.password().invalid() ? 'true' : 'false'"
+            aria-describedby="login-password-error"
+          />
+          @if (loginForm.password().errors()?.length && loginForm.password().touched()) {
+            <span id="login-password-error" class="text-xs text-red-600" role="alert">
+              {{ loginForm.password().errors()?.[0]?.message }}
+            </span>
+          }
+        </label>
+
+        @if (errorMessage(); as error) {
+          <div
+            class="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
+            role="alert"
+          >
+            {{ error }}
+          </div>
+        }
+
+        <button
+          type="submit"
+          [disabled]="submitting()"
+          class="inline-flex items-center justify-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          @if (submitting()) {
+            <span
+              class="inline-block h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent"
+              aria-hidden="true"
+            ></span>
+            <span>Validando…</span>
+          } @else {
+            <span>Ingresar</span>
+          }
+        </button>
+      </div>
+    </form>
+
+    <footer class="mt-6 border-t border-slate-200 pt-4">
+      <details class="text-xs text-slate-500">
+        <summary class="cursor-pointer select-none font-medium text-slate-600">
+          Credenciales de demostración
+        </summary>
+        <ul class="mt-2 space-y-1 font-mono">
+          <li><span class="text-slate-700">demo&#64;orion.com</span> / orion123</li>
+          <li><span class="text-slate-700">supervisor&#64;orion.com</span> / orion123</li>
+          <li><span class="text-slate-700">admin&#64;orion.com</span> / orion123</li>
+        </ul>
+      </details>
+    </footer>
+  </section>
+</main>
