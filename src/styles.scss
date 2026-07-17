@@ -1,7 +1,112 @@
 @use "tailwindcss";
 
-/* ORION global styles */
-:root {
-  color-scheme: light dark;
-}
+/*
+ * ORION theme system
+ * ---------------------------------------------------------------------------
+ * Tailwind v4 `dark:` variant is rebound to a `[data-theme="dark"]` selector
+ * on the root element. ThemeService toggles this attribute, so every `dark:`
+ * utility in the codebase reacts to the user-controlled theme (not the OS
+ * `prefers-color-scheme`). Default theme is `light`.
+ */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
+@layer base {
+  html,
+  body {
+    background-color: #f8fafc;
+    color: #0f172a;
+  }
+
+  [data-theme="dark"] html,
+  [data-theme="dark"] body {
+    background-color: #020617;
+    color: #f1f5f9;
+  }
+
+  /*
+   * Force explicit colors on form controls so the browser does not fall back
+   * to its native look (which becomes nearly invisible on dark systems).
+   */
+  input,
+  select,
+  textarea {
+    background-color: #ffffff;
+    color: #0f172a;
+    border-color: #cbd5e1;
+  }
+
+  [data-theme="dark"] input,
+  [data-theme="dark"] select,
+  [data-theme="dark"] textarea {
+    background-color: #1e293b;
+    color: #f1f5f9;
+    border-color: #334155;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #94a3b8;
+    opacity: 1;
+  }
+
+  [data-theme="dark"] input::placeholder,
+  [data-theme="dark"] textarea::placeholder {
+    color: #64748b;
+  }
+
+  /*
+   * Override Chromium / WebKit autofill styles. Without !important the browser
+   * paints its own yellow/light-blue background and flips the text color to
+   * white for contrast, which breaks the dark theme palette. The long
+   * `transition` delay is a documented trick to defer Chrome's background-color
+   * change long enough that the user never sees it.
+   */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-text-fill-color: #0f172a !important;
+    -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+    box-shadow: 0 0 0 1000px #ffffff inset !important;
+    caret-color: #0f172a !important;
+    transition: background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s;
+  }
+
+  [data-theme="dark"] input:-webkit-autofill,
+  [data-theme="dark"] input:-webkit-autofill:hover,
+  [data-theme="dark"] input:-webkit-autofill:focus,
+  [data-theme="dark"] input:-webkit-autofill:active {
+    -webkit-text-fill-color: #f1f5f9 !important;
+    -webkit-box-shadow: 0 0 0 1000px #1e293b inset !important;
+    box-shadow: 0 0 0 1000px #1e293b inset !important;
+    caret-color: #f1f5f9 !important;
+    transition: background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s;
+  }
+
+  /*
+   * Belt-and-suspenders: keep explicit colors on the :focus state too so
+   * Signal Forms / browser focus styles cannot regress us to white-on-white.
+   */
+  input:focus,
+  select:focus,
+  textarea:focus {
+    background-color: #ffffff;
+    color: #0f172a;
+  }
+
+  [data-theme="dark"] input:focus,
+  [data-theme="dark"] select:focus,
+  [data-theme="dark"] textarea:focus {
+    background-color: #1e293b;
+    color: #f1f5f9;
+  }
+
+  /* Scrollbar styling parity. */
+  * {
+    scrollbar-color: #cbd5e1 transparent;
+  }
+
+  [data-theme="dark"] * {
+    scrollbar-color: #334155 transparent;
+  }
+}
