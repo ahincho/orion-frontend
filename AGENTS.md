@@ -7,28 +7,30 @@ ORION is a cognitive agent for telecom operations. UI labels and copy are in **S
 
 ## Git Workflow (mandatory)
 
-This repository uses a two-tier branching model. Always validate the GitHub account is `ahincho` before any operation (use `gh api user --jq .login` or `ssh -T git@github.com`).
+This repository uses a **single-tier branching model** (rapid solo project).
+Always validate the GitHub account is `ahincho` before any operation (use
+`gh api user --jq .login` or `ssh -T git@github.com`).
 
-- `main` is the production branch. It only receives merges from `dev`.
-- `dev` is the integration branch. It receives pull requests from feature branches.
-- All work happens on a feature branch: `feat/<scope>`, `fix/<scope>`, `chore/<scope>`, etc.
+- `main` is the only permanent branch. PRs go directly against `main`.
+- All work happens on a feature branch: `feat/<scope>`, `fix/<scope>`,
+  `chore/<scope>`, etc.
 
 Lifecycle of every change:
 
-1. `git fetch origin` and `git checkout main && git pull --ff-only origin main`.
-2. `git checkout dev && git pull --ff-only origin dev`.
-3. `git checkout -b <type>/<scope>` from `dev`.
-4. Implement, commit with Conventional Commits (`feat:`, `fix:`, `chore:`, `refactor:`, `docs:`, `test:`, `build:`, `ci:`).
-5. `git push -u origin <type>/<scope>`.
-6. Open a Pull Request **from `<type>/<scope>` → `dev`** (never directly to `main`).
-7. After the PR is reviewed and CI passes, merge to `dev`.
-8. When the integration is stable, `dev` is merged into `main` by a release commit.
+1. `git fetch origin && git checkout main && git pull --ff-only origin main`.
+2. `git checkout -b <type>/<scope>` from `main`.
+3. Implement, commit with Conventional Commits (`feat:`, `fix:`, `chore:`,
+   `refactor:`, `docs:`, `test:`, `build:`, `ci:`).
+4. `git push -u origin <type>/<scope>`.
+5. Open a Pull Request **from `<type>/<scope>` to `main`**.
+6. After the PR is reviewed and CI passes, **squash-merge to `main`**.
+7. Branch is deleted automatically by the ruleset.
 
 Forbidden:
 
-- Committing directly to `main` or `dev`.
-- Opening a PR from a feature branch into `main` (must go through `dev` first).
-- Force-pushes to `main` or `dev` (`--force-with-lease` is allowed only on feature branches).
+- Committing directly to `main` (enforced by ruleset).
+- Opening a PR without a feature branch.
+- Force-pushes to `main` (enforced by ruleset `non_fast_forward`).
 
 ## TypeScript Best Practices
 
