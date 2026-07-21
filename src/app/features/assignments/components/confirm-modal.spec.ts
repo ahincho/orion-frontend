@@ -31,11 +31,9 @@ const CONTEXT: ConfirmAssignmentContext = {
 
 function findButton(
   root: HTMLElement,
-  className: string,
-): HTMLButtonElement | undefined {
-  return Array.from(root.querySelectorAll('button')).find((button) =>
-    button.classList.contains(className),
-  );
+  testId: string,
+): HTMLButtonElement | null {
+  return root.querySelector<HTMLButtonElement>(`[data-testid="${testId}"]`);
 }
 
 describe('ConfirmModal', () => {
@@ -57,7 +55,7 @@ describe('ConfirmModal', () => {
     });
     const confirmButton = findButton(
       fixture.nativeElement,
-      'confirm-modal__confirm',
+      'confirm-modal-confirm',
     );
     confirmButton?.click();
     expect(submitEmitted).toBe(true);
@@ -74,7 +72,7 @@ describe('ConfirmModal', () => {
     });
     const cancelButton = findButton(
       fixture.nativeElement,
-      'confirm-modal__cancel',
+      'confirm-modal-cancel',
     );
     cancelButton?.click();
     expect(cancelEmitted).toBe(true);

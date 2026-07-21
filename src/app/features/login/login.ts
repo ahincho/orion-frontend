@@ -18,8 +18,8 @@ interface LoginModel {
 @Component({
   selector: 'orion-login',
   imports: [FormField],
+  host: { class: 'block h-full' },
   templateUrl: './login.html',
-  styleUrl: './login.scss',
 })
 export class Login {
   private readonly auth = inject(AuthService);

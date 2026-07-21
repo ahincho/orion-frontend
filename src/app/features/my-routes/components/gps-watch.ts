@@ -13,7 +13,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 @Component({
   selector: 'orion-gps-watch',
   templateUrl: './gps-watch.html',
-  styleUrl: './gps-watch.scss',
+  host: { class: 'block' },
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [TranslatePipe],
 })

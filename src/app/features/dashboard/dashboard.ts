@@ -13,8 +13,8 @@ interface PillarCard {
 @Component({
   selector: 'orion-dashboard',
   imports: [RouterLink],
+  host: { class: 'block h-full' },
   templateUrl: './dashboard.html',
-  styleUrl: './dashboard.scss',
 })
 export class Dashboard {
   private readonly auth = inject(AuthService);

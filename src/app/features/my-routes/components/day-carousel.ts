@@ -18,7 +18,7 @@ export interface DayCarouselItem {
 @Component({
   selector: 'orion-day-carousel',
   templateUrl: './day-carousel.html',
-  styleUrl: './day-carousel.scss',
+  host: { class: 'block' },
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [TranslatePipe],
 })

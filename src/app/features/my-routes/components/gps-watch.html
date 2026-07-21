@@ -1,37 +1,56 @@
-<div class="gps-watch">
-  <header class="gps-watch__header">
-    <span class="gps-watch__title">
+<div class="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
+  <header class="flex items-center justify-between">
+    <span class="text-sm font-semibold text-slate-900 dark:text-slate-100">
       {{ 'routes.gps.title' | translate }}
     </span>
     <span
-      class="gps-watch__status"
-      [class.gps-watch__status--on]="isWatching()"
-      [class.gps-watch__status--off]="!isWatching()"
+      class="rounded-full px-2 py-0.5 text-xs font-medium"
+      [class.bg-green-100]="isWatching()"
+      [class.text-green-800]="isWatching()"
+      [class.dark:bg-green-950]="isWatching()"
+      [class.dark:text-green-300]="isWatching()"
+      [class.bg-slate-100]="!isWatching()"
+      [class.text-slate-600]="!isWatching()"
+      [class.dark:bg-slate-800]="!isWatching()"
+      [class.dark:text-slate-400]="!isWatching()"
     >
       {{ isWatching() ? ('routes.gps.watching' | translate) : ('routes.gps.idle' | translate) }}
     </span>
   </header>
 
-  <dl class="gps-watch__readout">
+  <dl class="m-0 grid grid-cols-3 gap-2">
     <div>
-      <dt>{{ 'routes.gps.lng' | translate }}</dt>
-      <dd>{{ currentPosition()?.[0]?.toFixed(6) ?? '—' }}</dd>
+      <dt class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">
+        {{ 'routes.gps.lng' | translate }}
+      </dt>
+      <dd class="mt-0.5 font-mono text-sm text-slate-900 dark:text-slate-100">
+        {{ currentPosition()?.[0]?.toFixed(6) ?? '—' }}
+      </dd>
     </div>
     <div>
-      <dt>{{ 'routes.gps.lat' | translate }}</dt>
-      <dd>{{ currentPosition()?.[1]?.toFixed(6) ?? '—' }}</dd>
+      <dt class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">
+        {{ 'routes.gps.lat' | translate }}
+      </dt>
+      <dd class="mt-0.5 font-mono text-sm text-slate-900 dark:text-slate-100">
+        {{ currentPosition()?.[1]?.toFixed(6) ?? '—' }}
+      </dd>
     </div>
     <div>
-      <dt>{{ 'routes.gps.heading' | translate }}</dt>
-      <dd>{{ headingDegrees().toFixed(0) }}°</dd>
+      <dt class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">
+        {{ 'routes.gps.heading' | translate }}
+      </dt>
+      <dd class="mt-0.5 font-mono text-sm text-slate-900 dark:text-slate-100">
+        {{ headingDegrees().toFixed(0) }}°
+      </dd>
     </div>
   </dl>
 
-  <footer class="gps-watch__footer">
+  <footer class="flex justify-end">
     @if (isWatching()) {
       <button
         type="button"
-        class="gps-watch__stop"
+        data-testid="gps-watch-stop"
+        class="cursor-pointer rounded-md border border-slate-300 bg-slate-100 px-4 py-1.5 text-sm font-medium text-slate-900 transition-colors duration-150 hover:bg-slate-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
         (click)="stopWatching()"
       >
         {{ 'routes.gps.stop' | translate }}
@@ -39,7 +58,8 @@
     } @else {
       <button
         type="button"
-        class="gps-watch__start"
+        data-testid="gps-watch-start"
+        class="cursor-pointer rounded-md border border-transparent bg-indigo-600 px-4 py-1.5 text-sm font-medium text-white transition-colors duration-150 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-400"
         (click)="startWatching()"
       >
         {{ 'routes.gps.start' | translate }}

@@ -1,15 +1,21 @@
-<section class="my-routes">
-  <header class="my-routes__header">
+<section class="flex h-full min-h-0 flex-col gap-4 p-6">
+  <header class="flex items-start justify-between gap-4">
     <div>
-      <p class="my-routes__eyebrow">{{ 'routes.header.eyebrow' | translate }}</p>
-      <h1 class="my-routes__title">{{ 'routes.header.title' | translate }}</h1>
-      <p class="my-routes__subtitle">{{ 'routes.header.subtitle' | translate }}</p>
+      <p class="m-0 text-xs font-semibold uppercase tracking-wider text-blue-700 dark:text-blue-400">
+        {{ 'routes.header.eyebrow' | translate }}
+      </p>
+      <h1 class="mt-1 text-2xl font-semibold text-slate-900 dark:text-slate-100">
+        {{ 'routes.header.title' | translate }}
+      </h1>
+      <p class="mt-1 max-w-3xl text-sm text-slate-500 dark:text-slate-400">
+        {{ 'routes.header.subtitle' | translate }}
+      </p>
     </div>
     <span
-      class="my-routes__badge"
-      [class.my-routes__badge--ready]="status() === 'ready'"
-      [class.my-routes__badge--loading]="status() === 'loading'"
-      [class.my-routes__badge--error]="status() === 'error'"
+      class="self-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white"
+      [class.bg-green-600]="status() === 'ready'"
+      [class.bg-amber-500]="status() === 'loading'"
+      [class.bg-red-600]="status() === 'error'"
     >
       {{ status() }}
     </span>
@@ -22,13 +28,13 @@
       (pickDay)="onPickDay($event)"
     />
 
-    <div class="my-routes__grid">
-      <aside class="my-routes__side">
-        <section class="my-routes__panel">
-          <h2 class="my-routes__panel-title">
+    <div class="grid min-h-0 flex-1 grid-cols-1 gap-4 lg:grid-cols-[minmax(18rem,20rem)_1fr]">
+      <aside class="flex flex-col gap-3 overflow-y-auto">
+        <section class="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+          <h2 class="m-0 text-sm font-semibold text-slate-900 dark:text-slate-100">
             {{ 'routes.summary.title' | translate }}
           </h2>
-          <p class="my-routes__summary">
+          <p class="m-0 text-sm text-slate-600 dark:text-slate-400">
             {{ assignment.summary }}
           </p>
         </section>
@@ -39,13 +45,13 @@
         />
 
         @if (validationIssue(); as issue) {
-          <p class="my-routes__warning" role="alert">
+          <p class="m-0 rounded-md bg-red-50 px-3 py-2 text-sm text-red-800 dark:bg-red-950 dark:text-red-300" role="alert">
             {{ 'routes.warnings.outsidePolygon' | translate }} ({{ issue }})
           </p>
         }
       </aside>
 
-      <div class="my-routes__canvas">
+      <div class="relative min-h-96 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700">
         <orion-map-shell
           #mapShell
           [styleUrl]="styleUrl()"
@@ -64,7 +70,7 @@
       </div>
     </div>
   } @else {
-    <p class="my-routes__empty">
+    <p class="m-0 rounded-xl bg-slate-100 p-4 text-sm text-slate-600 dark:bg-slate-800 dark:text-slate-400">
       {{ 'common.empty' | translate }}
     </p>
   }

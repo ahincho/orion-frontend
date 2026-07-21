@@ -92,7 +92,7 @@ describe('GpsWatch', () => {
     });
 
     const startButton: HTMLButtonElement | null =
-      fixture.nativeElement.querySelector('.gps-watch__start');
+      fixture.nativeElement.querySelector('[data-testid="gps-watch-start"]');
     expect(startButton).toBeTruthy();
     startButton?.click();
     fixture.detectChanges();
@@ -104,7 +104,7 @@ describe('GpsWatch', () => {
 
     fixture.detectChanges();
     const stopButton: HTMLButtonElement | null =
-      fixture.nativeElement.querySelector('.gps-watch__stop');
+      fixture.nativeElement.querySelector('[data-testid="gps-watch-stop"]');
     stopButton?.click();
     expect(fixture.componentInstance.isWatching()).toBe(false);
   });
@@ -123,7 +123,7 @@ describe('GpsWatch', () => {
     });
 
     const startButton: HTMLButtonElement | null =
-      fixture.nativeElement.querySelector('.gps-watch__start');
+      fixture.nativeElement.querySelector('[data-testid="gps-watch-start"]');
     startButton?.click();
 
     expect(errorMsg).toBe('Geolocation no disponible.');

@@ -14,8 +14,8 @@ interface NavItem {
 @Component({
   selector: 'orion-shell',
   imports: [RouterLink, RouterLinkActive, RouterOutlet, LanguageSwitcherComponent],
+  host: { class: 'block h-full' },
   templateUrl: './shell.html',
-  styleUrl: './shell.scss',
 })
 export class Shell {
   private readonly auth = inject(AuthService);

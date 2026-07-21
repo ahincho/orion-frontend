@@ -59,7 +59,7 @@ describe('DayCarousel', () => {
     });
 
     const tabs = fixture.nativeElement.querySelectorAll(
-      '.day-carousel__item',
+      '[data-testid="day-carousel-item"]',
     ) as NodeListOf<HTMLButtonElement>;
     expect(tabs.length).toBe(2);
     tabs[1].click();

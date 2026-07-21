@@ -28,7 +28,7 @@ export interface ConfirmAssignmentContext {
 @Component({
   selector: 'orion-confirm-modal',
   templateUrl: './confirm-modal.html',
-  styleUrl: './confirm-modal.scss',
+  host: { class: 'block' },
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [TranslatePipe],
 })
