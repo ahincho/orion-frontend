@@ -7,13 +7,16 @@ ORION is a cognitive agent for telecom operations. UI labels and copy are in **S
 
 ## Git Workflow (mandatory)
 
-This repository uses a **single-tier branching model** (rapid solo project).
-Always validate the GitHub account is `ahincho` before any operation (use
-`gh api user --jq .login` or `ssh -T git@github.com`).
+This repository uses a single-tier branching model aligned with the rest
+of the ORION monorepo (matches `orion-infrastructure`). Always validate
+the GitHub account is `ahincho` before any operation (use `gh api user
+--jq .login` or `ssh -T git@github.com`).
 
-- `main` is the only permanent branch. PRs go directly against `main`.
-- All work happens on a feature branch: `feat/<scope>`, `fix/<scope>`,
-  `chore/<scope>`, etc.
+- `main` is the protected branch (single ruleset: deletion +
+  non_fast_forward).
+- All work happens on a short-lived feature branch: `feat/<scope>`,
+  `fix/<scope>`, `chore/<scope>`, `docs/<scope>`, `ci/<scope>`, etc.
+- PR target: `main` directly. Squash-only merge. Branch deletion on merge.
 
 Lifecycle of every change:
 
@@ -22,15 +25,45 @@ Lifecycle of every change:
 3. Implement, commit with Conventional Commits (`feat:`, `fix:`, `chore:`,
    `refactor:`, `docs:`, `test:`, `build:`, `ci:`).
 4. `git push -u origin <type>/<scope>`.
-5. Open a Pull Request **from `<type>/<scope>` to `main`**.
-6. After the PR is reviewed and CI passes, **squash-merge to `main`**.
-7. Branch is deleted automatically by the ruleset.
+5. Open a Pull Request **from `<type>/<scope>` → `main`**.
+6. CI runs (actionlint + gitleaks + yamllint + eslint + unit tests).
+   CD does NOT trigger on PR; only on push to `main` (or `workflow_dispatch`).
+7. After review and CI green, squash-merge to `main`. Branch is deleted
+   automatically by the ruleset.
 
 Forbidden:
 
-- Committing directly to `main` (enforced by ruleset).
-- Opening a PR without a feature branch.
-- Force-pushes to `main` (enforced by ruleset `non_fast_forward`).
+- Committing directly to `main`.
+- Force-pushes to `main` (`--force-with-lease` is allowed only on feature branches).
+- Long-lived feature branches. Re-base from `main` if needed.
+
+## CI/CD
+
+- **Pin de reusables:** `spark-match/spark-match-01-devops@main` (alineado
+  con `orion-infrastructure`). Reusables fueron promovidos de `@dev` a
+  `@main` en spark-match PR #45 despues de validacion end-to-end.
+- **CI:** `.github/workflows/ci.yml` corre en PR y push a `main`:
+  - `actionlint`, `gitleaks`, `yamllint` (ecosystem reusables).
+  - `eslint` (node reusable, angular-eslint v22 flat config).
+  - `npm test` (vitest via `@angular/build:unit-test`, inline porque no
+    es reusable aun).
+- **CD:** `.github/workflows/deploy.yml` corre en push a `main` y
+  `workflow_dispatch`:
+  - Caller del reusable `angular-spa-deploy.yml@main`.
+  - Sube el `dist/orion-frontend/browser/` al bucket `orion-frontend-dev`
+    via `aws s3 sync --delete`.
+  - Invalida CloudFront con `aws cloudfront create-invalidation --paths "/*"`.
+  - Requiere GH Environment `dev` con secret `AWS_DEPLOY_ROLE_ARN` +
+    variables `S3_BUCKET`, `CLOUDFRONT_DISTRIBUTION_ID`, `API_URL`.
+
+## Build-time env vars
+
+- **`API_URL`** es la unica variable de build. Se inyecta via el hook
+  `prebuild` de npm (`scripts/pre-build-api-config.mjs`) que genera
+  `src/environments/api-config.generated.ts` (gitignored).
+- En CI, `deploy.yml` pasa `api-url` al reusable que a su vez lo exporta
+  como env var `API_URL` al step `Build SPA`. Si no se setea, el bundle
+  tiene `API_URL=""` y la SPA renderiza con mocks.
 
 ## TypeScript Best Practices
 

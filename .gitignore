@@ -6,6 +6,10 @@
 /out-tsc
 /bazel-out
 
+# Generated at build time by scripts/pre-build-api-config.mjs (prebuild hook).
+# Contains the build-time API_URL injection.
+/src/environments/api-config.generated.ts
+
 # Node
 /node_modules
 npm-debug.log

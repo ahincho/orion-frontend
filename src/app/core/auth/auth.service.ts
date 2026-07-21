@@ -1,5 +1,6 @@
-import { Injectable, computed, inject, signal } from '@angular/core';
-import { Observable, delay, of, tap, throwError } from 'rxjs';
+import { Injectable, computed, signal } from '@angular/core';
+import type { Observable } from 'rxjs';
+import { delay, of, tap, throwError } from 'rxjs';
 
 import { MOCK_CREDENTIALS } from './auth.mocks';
 import type { AuthResponse, LoginRequest, User } from './auth.types';
