@@ -7,26 +7,26 @@ import type { PolygonInfoGeneral } from '../../../core/types/assignment.types';
 
 const POLYGON: PolygonInfoGeneral = {
   id: 'pol-1',
-  codigo: 'LIM-TST-001',
-  nombre: 'Miraflores Centro',
-  tecnologia: 'GPON',
-  clasificacion: 'A',
-  estado: 'active',
-  totalHogares: 900,
-  hogaresConServicio: 720,
-  hogaresSinServicio: 180,
-  ultimaAsignacionFecha: '2026-07-12',
+  code: 'LIM-TST-001',
+  name: 'Miraflores Centro',
+  technology: 'GPON',
+  classification: 'A',
+  status: 'active',
+  totalHouseholds: 900,
+  householdsWithService: 720,
+  householdsWithoutService: 180,
+  lastAssignmentDate: '2026-07-12',
 };
 
 const CONTEXT: ConfirmAssignmentContext = {
   polygon: POLYGON,
   supervisorId: 'sup-001',
   supervisorName: 'Rosa Delgado',
-  distribuidorId: 'dist-001',
-  distribuidorName: 'Lima Centro',
-  fechaProgramada: '2026-07-25',
-  duracionEstimadaMin: 90,
-  nota: 'Verificar conexión GPON.',
+  distributorId: 'dist-001',
+  distributorName: 'Lima Centro',
+  scheduledDate: '2026-07-25',
+  estimatedDurationMin: 90,
+  note: 'Verificar conexión GPON.',
 };
 
 function findButton(

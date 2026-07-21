@@ -57,13 +57,13 @@ function vendorFor(
 ): VendorSurvey {
   return {
     id: `vendor-${polygonId}-${index}`,
-    hogarId: `hogar-${polygonId}-${index}`,
-    direccion: `Calle ${index + 100}, Lima`,
-    tecnologia: technology,
-    estado: index === 0 ? 'completado' : 'pendiente',
-    notas: null,
-    ventanaHoraria: '08:00 - 12:00',
-    coordenadas: [
+    homeId: `home-${polygonId}-${index}`,
+    address: `Calle ${index + 100}, Lima`,
+    technology,
+    status: index === 0 ? 'completed' : 'pending',
+    notes: null,
+    timeWindow: '08:00 - 12:00',
+    coordinates: [
       center[0] + offset * 0.002,
       center[1] + (offset % 2 === 0 ? 0.001 : -0.001),
     ],
@@ -101,17 +101,17 @@ function buildWeeklyAssignment(
   const radius = POLYGON_RADIUS[polygonId] ?? 0.005;
   const vendors: VendorSurvey[] = [];
   for (let i = 0; i < vendorCount; i += 1) {
-    vendors.push(vendorFor(i, polygonId, center, polygon.tecnologia, i));
+    vendors.push(vendorFor(i, polygonId, center, polygon.technology, i));
   }
   return {
-    fecha: isoDay(offsetDays),
-    poligonoId: polygonId,
-    poligonoNombre: polygon.nombre,
-    poligonoTecnologia: polygon.tecnologia,
-    hogares: polygon.totalHogares,
-    completado: vendors.every((vendor) => vendor.estado === 'completado'),
-    geometria: squareAround(center, radius),
-    puntoAcceso: accessPoint(center),
+    date: isoDay(offsetDays),
+    polygonId,
+    polygonName: polygon.name,
+    polygonTechnology: polygon.technology,
+    households: polygon.totalHouseholds,
+    completed: vendors.every((vendor) => vendor.status === 'completed'),
+    geometry: squareAround(center, radius),
+    accessPoint: accessPoint(center),
     vendors,
   };
 }
@@ -132,14 +132,14 @@ function buildDailySummary(
         : polygon.id === 'pol-lima-breña'
           ? 0.7
           : 0;
-  const completados = Math.round(polygon.totalHogares * completionRatio);
+  const completed = Math.round(polygon.totalHouseholds * completionRatio);
   return {
-    fecha: isoDay(offsetDays),
-    totalHogares: polygon.totalHogares,
-    hogaresCompletados: completados,
-    hogaresPendientes: polygon.totalHogares - completados,
-    porcentajeAvance: Math.round(completionRatio * 100),
-    tecnologia: polygon.tecnologia,
+    date: isoDay(offsetDays),
+    totalHouseholds: polygon.totalHouseholds,
+    householdsCompleted: completed,
+    householdsPending: polygon.totalHouseholds - completed,
+    progressPercent: Math.round(completionRatio * 100),
+    technology: polygon.technology,
   };
 }
 
@@ -166,8 +166,8 @@ const DAILY_SUMMARIES: readonly DailySummary[] = ROTATION.map(
 );
 
 export const MY_ROUTES_FIXTURE: WeeklyRoutesResponse = {
-  usuarioId: DEFAULT_USER_ID,
-  generadoEn: TODAY.toISOString(),
-  resumen: DAILY_SUMMARIES,
-  asignaciones: WEEKLY_ASSIGNMENTS,
+  userId: DEFAULT_USER_ID,
+  generatedAt: TODAY.toISOString(),
+  summary: DAILY_SUMMARIES,
+  assignments: WEEKLY_ASSIGNMENTS,
 };

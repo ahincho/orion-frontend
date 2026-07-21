@@ -7,15 +7,15 @@ import type { PolygonInfoGeneral } from '../../../core/types/assignment.types';
 
 const SAMPLE: PolygonInfoGeneral = {
   id: 'pol-1',
-  codigo: 'LIM-TST-001',
-  nombre: 'San Borja Centro',
-  tecnologia: 'GPON',
-  clasificacion: 'A',
-  estado: 'active',
-  totalHogares: 1000,
-  hogaresConServicio: 800,
-  hogaresSinServicio: 200,
-  ultimaAsignacionFecha: null,
+  code: 'LIM-TST-001',
+  name: 'San Borja Centro',
+  technology: 'GPON',
+  classification: 'A',
+  status: 'active',
+  totalHouseholds: 1000,
+  householdsWithService: 800,
+  householdsWithoutService: 200,
+  lastAssignmentDate: null,
 };
 
 function buttons(root: HTMLElement): NodeListOf<HTMLButtonElement> {

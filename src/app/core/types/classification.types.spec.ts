@@ -14,12 +14,12 @@ describe('classification palette', () => {
     expect(keys).toContain('B');
     expect(keys).toContain('C');
     expect(keys).toContain('default');
-    expect(keys).toContain('lejano');
+    expect(keys).toContain('far');
   });
 
   it('returns the entry whose key matches', () => {
     expect(classificationColor('A').fill).toBeTruthy();
-    expect(classificationColor('lejano').stroke).toBeTruthy();
+    expect(classificationColor('far').stroke).toBeTruthy();
   });
 
   it('falls back to default when the key is unknown', () => {

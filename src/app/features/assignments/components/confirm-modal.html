@@ -16,11 +16,11 @@
   <dl class="confirm-modal__grid">
     <div>
       <dt>{{ 'assignments.confirm.polygon' | translate }}</dt>
-      <dd>{{ context().polygon.codigo }} · {{ context().polygon.nombre }}</dd>
+      <dd>{{ context().polygon.code }} · {{ context().polygon.name }}</dd>
     </div>
     <div>
       <dt>{{ 'assignments.confirm.distributor' | translate }}</dt>
-      <dd>{{ context().distribuidorName }}</dd>
+      <dd>{{ context().distributorName }}</dd>
     </div>
     <div>
       <dt>{{ 'assignments.confirm.supervisor' | translate }}</dt>
@@ -28,11 +28,11 @@
     </div>
     <div>
       <dt>{{ 'assignments.confirm.date' | translate }}</dt>
-      <dd>{{ context().fechaProgramada }}</dd>
+      <dd>{{ context().scheduledDate }}</dd>
     </div>
     <div>
       <dt>{{ 'assignments.confirm.duration' | translate }}</dt>
-      <dd>{{ context().duracionEstimadaMin }} min</dd>
+      <dd>{{ context().estimatedDurationMin }} min</dd>
     </div>
   </dl>
 
@@ -40,7 +40,7 @@
     <span>{{ 'assignments.confirm.note' | translate }}</span>
     <textarea
       rows="3"
-      [value]="context().nota ?? ''"
+      [value]="context().note ?? ''"
       (input)="onNoteChange($event)"
     ></textarea>
   </label>

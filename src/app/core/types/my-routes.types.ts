@@ -4,45 +4,45 @@ import type { LngLat } from './geo.types';
 import type { Technology } from './technology.types';
 
 export interface DailySummary {
-  readonly fecha: string;
-  readonly totalHogares: number;
-  readonly hogaresCompletados: number;
-  readonly hogaresPendientes: number;
-  readonly porcentajeAvance: number;
-  readonly tecnologia: Technology;
+  readonly date: string;
+  readonly totalHouseholds: number;
+  readonly householdsCompleted: number;
+  readonly householdsPending: number;
+  readonly progressPercent: number;
+  readonly technology: Technology;
 }
 
 export interface VendorSurvey {
   readonly id: string;
-  readonly hogarId: string;
-  readonly direccion: string;
-  readonly tecnologia: Technology;
-  readonly estado:
-    | 'pendiente'
-    | 'en-progreso'
-    | 'completado'
-    | 'rechazado'
-    | 'no-aplica';
-  readonly notas: string | null;
-  readonly ventanaHoraria: string;
-  readonly coordenadas: LngLat;
+  readonly homeId: string;
+  readonly address: string;
+  readonly technology: Technology;
+  readonly status:
+    | 'pending'
+    | 'in-progress'
+    | 'completed'
+    | 'rejected'
+    | 'not-applicable';
+  readonly notes: string | null;
+  readonly timeWindow: string;
+  readonly coordinates: LngLat;
 }
 
 export interface WeeklyAssignment {
-  readonly fecha: string;
-  readonly poligonoId: string;
-  readonly poligonoNombre: string;
-  readonly poligonoTecnologia: Technology;
-  readonly hogares: number;
-  readonly completado: boolean;
-  readonly geometria: Feature<Polygon>;
-  readonly puntoAcceso: Feature<Point>;
+  readonly date: string;
+  readonly polygonId: string;
+  readonly polygonName: string;
+  readonly polygonTechnology: Technology;
+  readonly households: number;
+  readonly completed: boolean;
+  readonly geometry: Feature<Polygon>;
+  readonly accessPoint: Feature<Point>;
   readonly vendors: readonly VendorSurvey[];
 }
 
 export interface WeeklyRoutesResponse {
-  readonly usuarioId: string;
-  readonly generadoEn: string;
-  readonly resumen: readonly DailySummary[];
-  readonly asignaciones: readonly WeeklyAssignment[];
+  readonly userId: string;
+  readonly generatedAt: string;
+  readonly summary: readonly DailySummary[];
+  readonly assignments: readonly WeeklyAssignment[];
 }

@@ -4,7 +4,7 @@ import type { WeeklyAssignment } from '../../../core/types/my-routes.types';
 
 export interface RenderableAssignment {
   readonly id: string;
-  readonly fecha: string;
+  readonly date: string;
   readonly polygonFeature: Feature<Polygon>;
   readonly pointFeature: Feature<Point>;
   readonly summary: string;
@@ -14,11 +14,11 @@ export function buildRenderableAssignments(
   assignments: readonly WeeklyAssignment[],
 ): RenderableAssignment[] {
   return assignments.map((assignment) => ({
-    id: `${assignment.fecha}-${assignment.poligonoId}`,
-    fecha: assignment.fecha,
-    polygonFeature: assignment.geometria,
-    pointFeature: assignment.puntoAcceso,
-    summary: `${assignment.poligonoNombre} · ${assignment.hogares} hogares`,
+    id: `${assignment.date}-${assignment.polygonId}`,
+    date: assignment.date,
+    polygonFeature: assignment.geometry,
+    pointFeature: assignment.accessPoint,
+    summary: `${assignment.polygonName} · ${assignment.households} hogares`,
   }));
 }
 

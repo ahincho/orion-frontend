@@ -86,15 +86,15 @@ export class MyRoutesList {
       return null;
     }
     const date = this.selectedDate();
-    const list = response.asignaciones;
+    const list = response.assignments;
     if (!date) {
       return list[0] ?? null;
     }
-    return list.find((entry) => entry.fecha === date) ?? null;
+    return list.find((entry) => entry.date === date) ?? null;
   });
 
   readonly renderableAssignments = computed(() =>
-    buildRenderableAssignments(this.response()?.asignaciones ?? []),
+    buildRenderableAssignments(this.response()?.assignments ?? []),
   );
 
   readonly days = computed<readonly DayCarouselItem[]>(() => {
@@ -102,13 +102,13 @@ export class MyRoutesList {
     if (!response) {
       return [];
     }
-    return response.asignaciones.map((assignment) => ({
-      fecha: assignment.fecha,
-      label: formatDateLabel(assignment.fecha),
+    return response.assignments.map((assignment) => ({
+      fecha: assignment.date,
+      label: formatDateLabel(assignment.date),
       summary:
-        response.resumen.find((entry) => entry.fecha === assignment.fecha) ??
+        response.summary.find((entry) => entry.date === assignment.date) ??
         null,
-      assignmentId: assignment.poligonoId,
+      assignmentId: assignment.polygonId,
     }));
   });
 
@@ -119,7 +119,7 @@ export class MyRoutesList {
     }
     return {
       type: 'FeatureCollection' as const,
-      features: [assignment.geometria as Feature<Geometry>],
+      features: [assignment.geometry as Feature<Geometry>],
     };
   });
 
@@ -129,11 +129,11 @@ export class MyRoutesList {
       return null;
     }
     return {
-      id: `${assignment.fecha}-${assignment.poligonoId}`,
-      fecha: assignment.fecha,
-      polygonFeature: assignment.geometria,
-      pointFeature: assignment.puntoAcceso,
-      summary: `${assignment.poligonoNombre} · ${assignment.hogares} hogares`,
+      id: `${assignment.date}-${assignment.polygonId}`,
+      date: assignment.date,
+      polygonFeature: assignment.geometry,
+      pointFeature: assignment.accessPoint,
+      summary: `${assignment.polygonName} · ${assignment.households} hogares`,
     };
   });
 
@@ -162,9 +162,9 @@ export class MyRoutesList {
     effect(() => {
       const response = this.response();
       if (response && this.selectedDate() === null) {
-        const first = response.asignaciones[0];
+        const first = response.assignments[0];
         if (first) {
-          this.selectedDate.set(first.fecha);
+          this.selectedDate.set(first.date);
         }
       }
     });
@@ -190,13 +190,13 @@ export class MyRoutesList {
       this.validationSource.set(null);
       return;
     }
-    const inside = isPointInsidePolygon(coords, assignment.geometria);
+    const inside = isPointInsidePolygon(coords, assignment.geometry);
     if (inside) {
       this.validationIssue.set(null);
       this.validationSource.set(null);
       return;
     }
-    this.validationIssue.set('Punto fuera del polígono asignado.');
+    this.validationIssue.set('Punto fuera del poligono asignado.');
     this.validationSource.set(source);
   }
 }

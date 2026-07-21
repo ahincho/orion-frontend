@@ -6,35 +6,35 @@
 >
   <header class="polygon-info-modal__header">
     <span class="polygon-info-modal__code">
-      {{ polygon().codigo }}
+      {{ polygon().code }}
     </span>
     <h2 class="polygon-info-modal__name">
-      {{ polygon().nombre }}
+      {{ polygon().name }}
     </h2>
   </header>
 
   <dl class="polygon-info-modal__grid">
     <div>
       <dt>{{ 'assignments.modal.technology' | translate }}</dt>
-      <dd>{{ polygon().tecnologia }}</dd>
+      <dd>{{ polygon().technology }}</dd>
     </div>
     <div>
       <dt>{{ 'assignments.modal.classification' | translate }}</dt>
-      <dd>{{ polygon().clasificacion }}</dd>
+      <dd>{{ polygon().classification }}</dd>
     </div>
     <div>
       <dt>{{ 'assignments.modal.totalHouseholds' | translate }}</dt>
-      <dd>{{ polygon().totalHogares }}</dd>
+      <dd>{{ polygon().totalHouseholds }}</dd>
     </div>
     <div>
       <dt>{{ 'assignments.modal.withoutService' | translate }}</dt>
-      <dd>{{ polygon().hogaresSinServicio }}</dd>
+      <dd>{{ polygon().householdsWithoutService }}</dd>
     </div>
     <div>
       <dt>{{ 'assignments.modal.lastAssignment' | translate }}</dt>
       <dd>
-        @if (polygon().ultimaAsignacionFecha) {
-          {{ polygon().ultimaAsignacionFecha }}
+        @if (polygon().lastAssignmentDate) {
+          {{ polygon().lastAssignmentDate }}
         } @else {
           {{ 'assignments.modal.neverAssigned' | translate }}
         }

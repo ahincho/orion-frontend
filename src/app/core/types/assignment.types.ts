@@ -6,35 +6,35 @@ import type { Technology } from './technology.types';
 
 export interface PolygonInfoGeneral {
   readonly id: string;
-  readonly codigo: string;
-  readonly nombre: string;
-  readonly tecnologia: Technology;
-  readonly clasificacion: ClassificationKey;
-  readonly estado: 'active' | 'pending' | 'archived';
-  readonly totalHogares: number;
-  readonly hogaresConServicio: number;
-  readonly hogaresSinServicio: number;
-  readonly ultimaAsignacionFecha: string | null;
+  readonly code: string;
+  readonly name: string;
+  readonly technology: Technology;
+  readonly classification: ClassificationKey;
+  readonly status: 'active' | 'pending' | 'archived';
+  readonly totalHouseholds: number;
+  readonly householdsWithService: number;
+  readonly householdsWithoutService: number;
+  readonly lastAssignmentDate: string | null;
 }
 
 export interface DistribuidorZona {
   readonly id: string;
-  readonly nombre: string;
-  readonly codigoSap: string;
-  readonly zonas: readonly string[];
-  readonly coordinador: string;
-  readonly activo: boolean;
+  readonly name: string;
+  readonly sapCode: string;
+  readonly zones: readonly string[];
+  readonly coordinator: string;
+  readonly active: boolean;
 }
 
 export interface Supervisor {
   readonly id: string;
-  readonly dni: string;
-  readonly nombreCompleto: string;
+  readonly nationalId: string;
+  readonly fullName: string;
   readonly email: string;
-  readonly celular: string;
-  readonly zonaAsignada: string;
+  readonly phone: string;
+  readonly assignedZone: string;
   readonly distributors: readonly string[];
-  readonly disponibilidad: 'available' | 'busy' | 'offline';
+  readonly availability: 'available' | 'busy' | 'offline';
   readonly avatarUrl: string | null;
 }
 
@@ -47,25 +47,25 @@ export interface PolygonGeoJsonData {
 export interface AssignmentDraft {
   readonly polygonId: string;
   readonly supervisorId: string;
-  readonly distribuidorId: string;
-  readonly fechaProgramada: string;
-  readonly duracionEstimadaMin: number;
-  readonly nota: string | null;
+  readonly distributorId: string;
+  readonly scheduledDate: string;
+  readonly estimatedDurationMin: number;
+  readonly note: string | null;
 }
 
 export type AssignmentAvailability = 'available' | 'partial' | 'taken';
 
 export interface AssignmentBatch {
   readonly id: string;
-  readonly poligonos: readonly PolygonInfoGeneral[];
+  readonly polygons: readonly PolygonInfoGeneral[];
   readonly draft: AssignmentDraft;
-  readonly centroside: LngLat;
-  readonly fechaCreacion: string;
+  readonly centroid: LngLat;
+  readonly createdAt: string;
 }
 
 export interface AssignmentByDay {
-  readonly fecha: string;
-  readonly poligonosAsignados: number;
-  readonly hogaresAsignados: number;
-  readonly porcentajeAvance: number;
+  readonly date: string;
+  readonly assignedPolygons: number;
+  readonly assignedHouseholds: number;
+  readonly progressPercent: number;
 }
