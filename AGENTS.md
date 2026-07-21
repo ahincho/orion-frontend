@@ -30,6 +30,15 @@ Lifecycle of every change:
    CD does NOT trigger on PR; only on push to `main` (or `workflow_dispatch`).
 7. After review and CI green, squash-merge to `main`. Branch is deleted
    automatically by the ruleset.
+8. Merge command (validated against `ahincho/orion-frontend` on
+   2026-07-21, branch-protection = none, active account = `ahincho`):
+   ```bash
+   gh pr merge <n> --repo ahincho/orion-frontend --squash --delete-branch
+   ```
+   No `--admin` flag is required (no branch-protection rules on `main`),
+   and no `gh auth switch` is required (the active keyring account
+   `ahincho` already has `repo` + `workflow` scopes). `GITLEAKS_LICENSE`
+   is **not** required for the gitleaks reusable to succeed.
 
 Forbidden:
 
