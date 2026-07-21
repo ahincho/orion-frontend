@@ -26,7 +26,7 @@ export class SupervisorsApi {
     query: SupervisorSearchQuery = {},
   ): Observable<Result<ListResponse<Supervisor>>> {
     return this.client.get<ListResponse<Supervisor>>(
-      '/api/v1/asignacion-rutas/supervisores',
+      '/api/v1/supervisors',
       {
         params: query.q ? { q: query.q } : {},
       },

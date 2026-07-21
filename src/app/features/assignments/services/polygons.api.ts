@@ -26,7 +26,7 @@ export class PolygonsApi {
   }
 
   list(): Observable<Result<PolygonGeoJsonData>> {
-    return this.client.get<PolygonGeoJsonData>('/api/v1/regional/poligonos');
+    return this.client.get<PolygonGeoJsonData>('/api/v1/polygons');
   }
 }
 
