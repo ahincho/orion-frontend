@@ -1,0 +1,62 @@
+# =============================================================================
+# CD - Angular SPA Deploy (orion-frontend -> S3 + CloudFront)
+# =============================================================================
+# Caller del reusable en spark-match/spark-match-01-devops@main.
+# Trigger: push a main + workflow_dispatch (para re-deploys manuales).
+#
+# El reusable hace:
+#   1. checkout + setup-node + npm ci + cache
+#   2. `npm run build` con API_URL inyectada como env var (frontend env var)
+#   3. aws s3 sync --delete del dist/orion-frontend/browser/ al bucket
+#   4. aws cloudfront create-invalidation --paths "/*"
+#
+# Inputs viven hardcoded aqui a proposito por la misma razon que en
+# orion-infrastructure (ver AGENTS.md de orion-infrastructure, seccion
+# "Convenciones Terraform / GH Actions vars"): un job que invoca un reusable
+# workflow via `uses:` no puede declarar `environment:`, lo que impide
+# leer GH Environment variables desde este caller. Las repo-scoped GH
+# Variables (S3_BUCKET, CLOUDFRONT_DISTRIBUTION_ID) SI son accesibles.
+#
+# El secret AWS_DEPLOY_ROLE_ARN (env: dev) SI funciona porque lo pasamos
+# explicitamente via `secrets:` (mismo workaround que en spark-match-01-devops
+# para cross-owner inheritance).
+#
+# Pin @main (mismo que orion-infrastructure).
+# =============================================================================
+
+name: CD - Angular SPA Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual deploy'
+        required: false
+        default: 'manual trigger'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    name: Deploy (dev)
+    uses: spark-match/spark-match-01-devops/.github/workflows/angular-spa-deploy.yml@main  # yamllint disable-line rule:line-length
+    secrets:
+      AWS_DEPLOY_ROLE_ARN: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+    with:
+      environment-name: dev
+      aws-region: us-east-1
+      s3-bucket: ${{ vars.S3_BUCKET }}
+      cloudfront-distribution-id: ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
+      # API_URL del backend ORION para dev. Cuando se cree el API Gateway
+      # + Lambda en orion-backend, este valor apuntara a la URL publica
+      # del stage dev (e.g. https://api.dev.orion.com). Por ahora, mientras
+      # el backend no este desplegado, queda vacio (SPA renderiza con mocks).
+      api-url: ${{ vars.API_URL }}
+      # Pin Angular 22 + Node 24 (default, declarado explicito).
+      node-version: '24'
+      build-script: build
+      artifact-path: dist/orion-frontend/browser
