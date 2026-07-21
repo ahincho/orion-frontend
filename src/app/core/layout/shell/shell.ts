@@ -3,6 +3,7 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
 
 import { AuthService } from '../../auth/auth.service';
 import { ThemeService } from '../../theme/theme.service';
+import { LanguageSwitcherComponent } from '../../i18n/language-switcher';
 
 interface NavItem {
   readonly path: string;
@@ -12,7 +13,7 @@ interface NavItem {
 
 @Component({
   selector: 'orion-shell',
-  imports: [RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet, LanguageSwitcherComponent],
   templateUrl: './shell.html',
   styleUrl: './shell.scss',
 })

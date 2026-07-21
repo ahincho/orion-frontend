@@ -1,0 +1,19 @@
+{
+  "common.appName": "ORION",
+  "common.actions.cancel": "Cancelar",
+  "common.actions.save": "Guardar",
+  "common.actions.delete": "Eliminar",
+  "common.actions.close": "Cerrar",
+  "common.actions.search": "Buscar",
+  "common.actions.export": "Exportar",
+  "common.actions.import": "Importar",
+  "common.actions.confirm": "Confirmar",
+  "common.actions.refresh": "Actualizar",
+  "common.loading": "Cargando\u2026",
+  "common.error.generic": "Algo sali\u00f3 mal",
+  "common.error.network": "Error de red. Verifica tu conexi\u00f3n.",
+  "common.empty": "No hay datos para mostrar",
+  "language.label": "Idioma",
+  "language.spanish": "Espa\u00f1ol",
+  "language.english": "Ingl\u00e9s"
+}

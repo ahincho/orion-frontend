@@ -1,0 +1,19 @@
+{
+  "common.appName": "ORION",
+  "common.actions.cancel": "Cancel",
+  "common.actions.save": "Save",
+  "common.actions.delete": "Delete",
+  "common.actions.close": "Close",
+  "common.actions.search": "Search",
+  "common.actions.export": "Export",
+  "common.actions.import": "Import",
+  "common.actions.confirm": "Confirm",
+  "common.actions.refresh": "Refresh",
+  "common.loading": "Loading\u2026",
+  "common.error.generic": "Something went wrong",
+  "common.error.network": "Network error. Check your connection.",
+  "common.empty": "No data to display",
+  "language.label": "Language",
+  "language.spanish": "Spanish",
+  "language.english": "English"
+}
