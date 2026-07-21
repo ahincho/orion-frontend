@@ -1,13 +1,5 @@
 import type { OnDestroy } from '@angular/core';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  effect,
-  input,
-  output,
-  signal,
-} from '@angular/core';
+import { Component, computed, effect, input, output, signal } from '@angular/core';
 import {
   type GeoJSONSource,
   type Map as MapLibreMap,
@@ -16,11 +8,7 @@ import {
 } from 'maplibre-gl';
 import type { Feature, FeatureCollection, Geometry } from 'geojson';
 
-import type {
-  GeoJsonInput,
-  GeoJsonLayerStyle,
-  GeoJsonLayerStyleFn,
-} from '../map.types';
+import type { GeoJsonInput, GeoJsonLayerStyle, GeoJsonLayerStyleFn } from '../map.types';
 
 const DEFAULT_STYLE: Required<GeoJsonLayerStyle> = {
   fill: '#4f46e5',
@@ -51,7 +39,6 @@ const DEFAULT_LAYER_PREFIX = 'orion-geojson';
 @Component({
   selector: 'orion-geojson-layer',
   template: '',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GeoJsonLayerComponent implements OnDestroy {
   readonly map = input<MapLibreMap | undefined>(undefined);
@@ -159,10 +146,7 @@ export class GeoJsonLayerComponent implements OnDestroy {
     return this.styleFn()?.(feature);
   }
 
-  private syncSource(
-    map: MapLibreMap,
-    data: NonNullable<GeoJsonInput>,
-  ): void {
+  private syncSource(map: MapLibreMap, data: NonNullable<GeoJsonInput>): void {
     const sourceId = this.sourceId();
     const fill = this.fillLayerId();
     const line = this.lineLayerId();
@@ -287,10 +271,7 @@ function normalizeToFeatureCollection(
 
 function toGeojsonFeature(eventFeature: MapGeoJSONFeature): Feature<Geometry> {
   const geometry = eventFeature.geometry as Geometry;
-  const properties = (eventFeature.properties ?? {}) as Record<
-    string,
-    unknown
-  >;
+  const properties = (eventFeature.properties ?? {}) as Record<string, unknown>;
   return {
     type: 'Feature',
     id: eventFeature.id,
