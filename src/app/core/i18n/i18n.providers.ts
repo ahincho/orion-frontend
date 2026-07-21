@@ -18,20 +18,31 @@ import { DEFAULT_LANGUAGE } from './i18n.types';
  * Custom HTTP-free loader. Resolves translations from `/assets/i18n/<lang>.json`
  * through `fetch`, which Angular does not polyfill with HttpClient but every
  * browser running the SPA already provides.
+ *
+ * Implemented as a **function factory** rather than a `class` so that
+ * `@ngx-translate/core@18`'s `isClass()` heuristic does not misclassify it as
+ * a class constructor after minification. That heuristic probes
+ * `Function.prototype.toString` against `/^class\s/`, which fails for
+ * `var X = class {...}` (no space between `class` and `{`). The minified
+ * loader therefore ended up registered as `useFactory` instead of `useClass`,
+ * and Angular DI tried to invoke it without `new`, throwing "Class
+ * constructor cannot be invoked without 'new'".
  */
-export class AssetsTranslateLoader implements TranslateLoader {
-  getTranslation(lang: string): Observable<TranslationObject> {
-    if (typeof fetch !== 'function') {
-      return from(Promise.resolve({} as TranslationObject));
-    }
-    const promise = fetch(`/assets/i18n/${lang}.json`).then((response) => {
-      if (!response.ok) {
-        throw new Error(`i18n file missing for "${lang}"`);
+export function assetsTranslateLoader(): TranslateLoader {
+  return {
+    getTranslation(lang: string): Observable<TranslationObject> {
+      if (typeof fetch !== 'function') {
+        return from(Promise.resolve({} as TranslationObject));
       }
-      return response.json() as Promise<TranslationObject>;
-    });
-    return from(promise);
-  }
+      const promise = fetch(`/assets/i18n/${lang}.json`).then((response) => {
+        if (!response.ok) {
+          throw new Error(`i18n file missing for "${lang}"`);
+        }
+        return response.json() as Promise<TranslationObject>;
+      });
+      return from(promise);
+    },
+  };
 }
 
 /**
@@ -51,7 +62,7 @@ export function provideI18n() {
     provideTranslateService({
       lang: DEFAULT_LANGUAGE,
       fallbackLang: DEFAULT_LANGUAGE,
-      loader: AssetsTranslateLoader,
+      loader: assetsTranslateLoader,
     }),
     provideAppInitializer(() => {
       const language = inject(LanguageService);
