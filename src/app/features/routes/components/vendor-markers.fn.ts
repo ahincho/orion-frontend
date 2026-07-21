@@ -7,9 +7,7 @@ export interface VendorMarkerEntry {
   readonly completed: boolean;
 }
 
-export function buildVendorMarkers(
-  point: Feature<Point> | undefined,
-): VendorMarkerEntry[] {
+export function buildVendorMarkers(point: Feature<Point> | undefined): VendorMarkerEntry[] {
   if (!point) {
     return [];
   }

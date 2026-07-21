@@ -6,16 +6,14 @@ export const routes: Routes = [
   {
     path: 'login',
     canActivate: [guestGuard],
-    loadComponent: () =>
-      import('./features/login/login').then((m) => m.Login),
+    loadComponent: () => import('./features/login/login').then((m) => m.Login),
     title: 'ORION · Iniciar sesión',
   },
   {
     path: '',
     canActivate: [authGuard],
     canActivateChild: [authGuard],
-    loadComponent: () =>
-      import('./core/layout/shell/shell').then((m) => m.Shell),
+    loadComponent: () => import('./core/layout/shell/shell').then((m) => m.Shell),
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       {
@@ -32,8 +30,7 @@ export const routes: Routes = [
       },
       {
         path: 'routes',
-        loadChildren: () =>
-          import('./features/my-routes/my-routes.routes').then((m) => m.MY_ROUTES_ROUTES),
+        loadChildren: () => import('./features/routes/routes.routes').then((m) => m.ROUTES_ROUTES),
         title: 'ORION · Mi Ruta',
       },
       {

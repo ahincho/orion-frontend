@@ -18,11 +18,7 @@ interface GeoPosition {
   readonly timestamp: number;
 }
 
-function buildPosition(position: {
-  lng: number;
-  lat: number;
-  heading: number;
-}): GeoPosition {
+function buildPosition(position: { lng: number; lat: number; heading: number }): GeoPosition {
   return {
     coords: {
       longitude: position.lng,
@@ -91,8 +87,9 @@ describe('GpsWatch', () => {
       emitted = coords;
     });
 
-    const startButton: HTMLButtonElement | null =
-      fixture.nativeElement.querySelector('[data-testid="gps-watch-start"]');
+    const startButton: HTMLButtonElement | null = fixture.nativeElement.querySelector(
+      '[data-testid="gps-watch-start"]',
+    );
     expect(startButton).toBeTruthy();
     startButton?.click();
     fixture.detectChanges();
@@ -103,8 +100,9 @@ describe('GpsWatch', () => {
     expect(fixture.componentInstance.isWatching()).toBe(true);
 
     fixture.detectChanges();
-    const stopButton: HTMLButtonElement | null =
-      fixture.nativeElement.querySelector('[data-testid="gps-watch-stop"]');
+    const stopButton: HTMLButtonElement | null = fixture.nativeElement.querySelector(
+      '[data-testid="gps-watch-stop"]',
+    );
     stopButton?.click();
     expect(fixture.componentInstance.isWatching()).toBe(false);
   });
@@ -122,8 +120,9 @@ describe('GpsWatch', () => {
       errorMsg = message;
     });
 
-    const startButton: HTMLButtonElement | null =
-      fixture.nativeElement.querySelector('[data-testid="gps-watch-start"]');
+    const startButton: HTMLButtonElement | null = fixture.nativeElement.querySelector(
+      '[data-testid="gps-watch-start"]',
+    );
     startButton?.click();
 
     expect(errorMsg).toBe('Geolocation no disponible.');

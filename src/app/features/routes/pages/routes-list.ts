@@ -1,13 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  PLATFORM_ID,
-  computed,
-  effect,
-  inject,
-  signal,
-  viewChild,
-} from '@angular/core';
+import { Component, PLATFORM_ID, computed, effect, inject, signal, viewChild } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -21,18 +12,12 @@ import {
 } from '../../../core/types/classification.types';
 import { isSuccess } from '../../../core/http/result';
 
-import { injectMyRoutesApi } from '../services/my-routes.api';
+import { injectRoutesApi } from '../services/routes.api';
 import { DayCarousel, type DayCarouselItem } from '../components/day-carousel';
 import { GpsWatch } from '../components/gps-watch';
-import {
-  buildRenderableAssignments,
-  formatDateLabel,
-} from './my-routes-list.utils';
+import { buildRenderableAssignments, formatDateLabel } from './routes-list.utils';
 
-import type {
-  WeeklyAssignment,
-  WeeklyRoutesResponse,
-} from '../../../core/types/my-routes.types';
+import type { WeeklyAssignment, WeeklyRoutesResponse } from '../../../core/types/routes.types';
 import type { LngLat } from '../../../core/types/geo.types';
 import type { Feature, Geometry } from 'geojson';
 
@@ -41,27 +26,20 @@ const INITIAL_ZOOM = 11.5;
 const FREE_MAP_STYLE = 'https://tiles.openfreemap.org/styles/liberty';
 
 @Component({
-  selector: 'orion-my-routes-list',
-  templateUrl: './my-routes-list.html',
+  selector: 'orion-routes-list',
+  templateUrl: './routes-list.html',
   host: { class: 'block h-full' },
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    MapShellComponent,
-    GeoJsonLayerComponent,
-    DayCarousel,
-    GpsWatch,
-    TranslatePipe,
-  ],
+  imports: [MapShellComponent, GeoJsonLayerComponent, DayCarousel, GpsWatch, TranslatePipe],
 })
-export class MyRoutesList {
-  private readonly myRoutesApi = injectMyRoutesApi();
+export class RoutesList {
+  private readonly routesApi = injectRoutesApi();
   private readonly platformId = inject(PLATFORM_ID);
 
   readonly styleUrl = signal<string>(FREE_MAP_STYLE);
   readonly center = signal<[number, number]>(INITIAL_CENTER);
   readonly zoom = signal<number>(INITIAL_ZOOM);
 
-  readonly weeklyResult = toSignal(this.myRoutesApi.week(), {
+  readonly weeklyResult = toSignal(this.routesApi.week(), {
     initialValue: undefined,
   });
 
@@ -105,9 +83,7 @@ export class MyRoutesList {
     return response.assignments.map((assignment) => ({
       fecha: assignment.date,
       label: formatDateLabel(assignment.date),
-      summary:
-        response.summary.find((entry) => entry.date === assignment.date) ??
-        null,
+      summary: response.summary.find((entry) => entry.date === assignment.date) ?? null,
       assignmentId: assignment.polygonId,
     }));
   });
@@ -141,9 +117,8 @@ export class MyRoutesList {
   readonly validationIssue = signal<string | null>(null);
   readonly validationSource = signal<'user' | 'point' | null>(null);
 
-  readonly polygonClassificationFn = (
-    classification: ClassificationKey | null,
-  ) => classificationColor(classification);
+  readonly polygonClassificationFn = (classification: ClassificationKey | null) =>
+    classificationColor(classification);
 
   readonly polygonStyleFn = () => ({
     fill: '#6366f1',

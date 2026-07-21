@@ -1,6 +1,6 @@
 import type { Feature, Point, Polygon } from 'geojson';
 
-import type { WeeklyAssignment } from '../../../core/types/my-routes.types';
+import type { WeeklyAssignment } from '../../../core/types/routes.types';
 
 export interface RenderableAssignment {
   readonly id: string;

@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  PLATFORM_ID,
-  inject,
-  output,
-  signal,
-} from '@angular/core';
+import { Component, DestroyRef, PLATFORM_ID, inject, output, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -14,7 +6,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'orion-gps-watch',
   templateUrl: './gps-watch.html',
   host: { class: 'block' },
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [TranslatePipe],
 })
 export class GpsWatch {
@@ -45,10 +36,7 @@ export class GpsWatch {
     }
     this.watchId = geo.watchPosition(
       (position) => {
-        const coords: [number, number] = [
-          position.coords.longitude,
-          position.coords.latitude,
-        ];
+        const coords: [number, number] = [position.coords.longitude, position.coords.latitude];
         this.currentPosition.set(coords);
         this.headingDegrees.set(position.coords.heading ?? this.headingDegrees());
         this.locationUpdate.emit(coords);
