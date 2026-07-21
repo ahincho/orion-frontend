@@ -1,4 +1,4 @@
-export type ClassificationKey = 'A' | 'B' | 'C' | 'default' | 'lejano';
+export type ClassificationKey = 'A' | 'B' | 'C' | 'default' | 'far';
 
 export interface ClassificationColor {
   readonly key: ClassificationKey;
@@ -17,7 +17,7 @@ export const CLASSIFICATION_PALETTE: readonly ClassificationColor[] = [
     stroke: '#475569',
     label: 'Sin clasificacion',
   },
-  { key: 'lejano', fill: '#a855f7', stroke: '#6b21a8', label: 'Fuera de cobertura' },
+  { key: 'far', fill: '#a855f7', stroke: '#6b21a8', label: 'Out of coverage' },
 ] as const;
 
 export const DEFAULT_CLASSIFICATION: ClassificationKey = 'default';

@@ -28,21 +28,18 @@ export interface MockBackendHandler {
 
 interface CreatedAssignmentBatch {
   readonly id: string;
-  readonly poligonos: readonly string[];
+  readonly polygons: readonly string[];
   readonly supervisorId: string;
-  readonly distribuidorId: string;
-  readonly fechaProgramada: string;
-  readonly fechaCreacion: string;
-  readonly duracionEstimadaMin: number;
-  readonly nota: string | null;
+  readonly distributorId: string;
+  readonly scheduledDate: string;
+  readonly createdAt: string;
+  readonly estimatedDurationMin: number;
+  readonly note: string | null;
 }
 
 const storedAssignments: CreatedAssignmentBatch[] = [];
 
-function readString(
-  body: unknown,
-  key: string,
-): string | null {
+function readString(body: unknown, key: string): string | null {
   if (
     body !== null &&
     typeof body === 'object' &&
@@ -54,10 +51,7 @@ function readString(
   return null;
 }
 
-function readNumber(
-  body: unknown,
-  key: string,
-): number | null {
+function readNumber(body: unknown, key: string): number | null {
   if (
     body !== null &&
     typeof body === 'object' &&
@@ -113,9 +107,9 @@ export const mockBackendHandlers: readonly MockBackendHandler[] = [
       }
       const filtered = SUPERVISOR_FIXTURES.filter(
         (entry) =>
-          entry.nombreCompleto.toLowerCase().includes(query) ||
-          entry.zonaAsignada.toLowerCase().includes(query) ||
-          entry.dni.includes(query),
+          entry.fullName.toLowerCase().includes(query) ||
+          entry.assignedZone.toLowerCase().includes(query) ||
+          entry.nationalId.includes(query),
       );
       return {
         total: filtered.length,
@@ -132,28 +126,28 @@ export const mockBackendHandlers: readonly MockBackendHandler[] = [
     resolve: (request) => {
       const body = request.body as unknown;
       const id = `batch-${Date.now().toString(36)}`;
-      const poligonos = Array.isArray(
-        (body as { poligonos?: unknown }).poligonos,
+      const polygons = Array.isArray(
+        (body as { polygons?: unknown }).polygons,
       )
-        ? ((body as { poligonos: unknown[] }).poligonos.filter(
+        ? ((body as { polygons: unknown[] }).polygons.filter(
             (id): id is string => typeof id === 'string',
           ))
         : [];
       const supervisorId = readString(body, 'supervisorId') ?? '';
-      const distribuidorId = readString(body, 'distribuidorId') ?? '';
-      const fechaProgramada =
-        readString(body, 'fechaProgramada') ?? new Date().toISOString();
-      const duracionEstimadaMin = readNumber(body, 'duracionEstimadaMin') ?? 0;
-      const nota = readString(body, 'nota');
+      const distributorId = readString(body, 'distributorId') ?? '';
+      const scheduledDate =
+        readString(body, 'scheduledDate') ?? new Date().toISOString();
+      const estimatedDurationMin = readNumber(body, 'estimatedDurationMin') ?? 0;
+      const note = readString(body, 'note');
       const created: CreatedAssignmentBatch = {
         id,
-        poligonos,
+        polygons,
         supervisorId,
-        distribuidorId,
-        fechaProgramada,
-        fechaCreacion: new Date().toISOString(),
-        duracionEstimadaMin,
-        nota,
+        distributorId,
+        scheduledDate,
+        createdAt: new Date().toISOString(),
+        estimatedDurationMin,
+        note,
       };
       storedAssignments.push(created);
       return {

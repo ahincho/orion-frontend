@@ -21,12 +21,12 @@
         <label class="assignments__field">
           <span>{{ 'assignments.form.distributorLabel' | translate }}</span>
           <select
-            [value]="selectedDistribuidorId() ?? ''"
-            (change)="onSelectDistribuidor(getSelectValue($event))"
+            [value]="selectedDistributorId() ?? ''"
+            (change)="onSelectDistributor(getSelectValue($event))"
           >
             <option value="" disabled>{{ 'assignments.form.distributorPlaceholder' | translate }}</option>
             @for (entry of distributors(); track entry.id) {
-              <option [value]="entry.id">{{ entry.nombre }}</option>
+              <option [value]="entry.id">{{ entry.name }}</option>
             }
           </select>
         </label>
@@ -51,10 +51,10 @@
                 (click)="onSelectSupervisor(supervisor.id)"
               >
                 <span class="assignments__supervisor-name">
-                  {{ supervisor.nombreCompleto }}
+                  {{ supervisor.fullName }}
                 </span>
                 <span class="assignments__supervisor-meta">
-                  {{ supervisor.zonaAsignada }} · {{ supervisor.disponibilidad }}
+                  {{ supervisor.assignedZone }} · {{ supervisor.availability }}
                 </span>
               </button>
             </li>

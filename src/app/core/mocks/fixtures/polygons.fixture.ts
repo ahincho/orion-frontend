@@ -1,14 +1,9 @@
 import type {
-  Polygon,
-  Feature,
-  FeatureCollection,
-} from 'geojson';
-
-import type {
   PolygonGeoJsonData,
   PolygonInfoGeneral,
 } from '../../../core/types/assignment.types';
 import { classificationColor } from '../../../core/types/classification.types';
+import type { Feature, Polygon } from 'geojson';
 
 /**
  * Builds a 4-vertex closed ring centered on [lng, lat] with the given
@@ -42,75 +37,75 @@ function square(
 export const POLYGON_FIXTURES: readonly PolygonInfoGeneral[] = [
   {
     id: 'pol-lima-miraflores',
-    codigo: 'LIM-MIR-001',
-    nombre: 'Miraflores Centro',
-    tecnologia: 'GPON',
-    clasificacion: 'A',
-    estado: 'active',
-    totalHogares: 1840,
-    hogaresConServicio: 1620,
-    hogaresSinServicio: 220,
-    ultimaAsignacionFecha: '2026-07-12',
+    code: 'LIM-MIR-001',
+    name: 'Miraflores Centro',
+    technology: 'GPON',
+    classification: 'A',
+    status: 'active',
+    totalHouseholds: 1840,
+    householdsWithService: 1620,
+    householdsWithoutService: 220,
+    lastAssignmentDate: '2026-07-12',
   },
   {
     id: 'pol-lima-surco',
-    codigo: 'LIM-SUR-002',
-    nombre: 'Surco Residencial',
-    tecnologia: 'HFC',
-    clasificacion: 'B',
-    estado: 'active',
-    totalHogares: 1280,
-    hogaresConServicio: 980,
-    hogaresSinServicio: 300,
-    ultimaAsignacionFecha: '2026-07-10',
+    code: 'LIM-SUR-002',
+    name: 'Surco Residencial',
+    technology: 'HFC',
+    classification: 'B',
+    status: 'active',
+    totalHouseholds: 1280,
+    householdsWithService: 980,
+    householdsWithoutService: 300,
+    lastAssignmentDate: '2026-07-10',
   },
   {
     id: 'pol-lima-sanisidro',
-    codigo: 'LIM-SIS-003',
-    nombre: 'San Isidro Empresarial',
-    tecnologia: 'GPON',
-    clasificacion: 'A',
-    estado: 'active',
-    totalHogares: 920,
-    hogaresConServicio: 880,
-    hogaresSinServicio: 40,
-    ultimaAsignacionFecha: '2026-07-14',
+    code: 'LIM-SIS-003',
+    name: 'San Isidro Empresarial',
+    technology: 'GPON',
+    classification: 'A',
+    status: 'active',
+    totalHouseholds: 920,
+    householdsWithService: 880,
+    householdsWithoutService: 40,
+    lastAssignmentDate: '2026-07-14',
   },
   {
     id: 'pol-lima-lince',
-    codigo: 'LIM-LIN-004',
-    nombre: 'Lince Mixto',
-    tecnologia: 'COPPER',
-    clasificacion: 'C',
-    estado: 'pending',
-    totalHogares: 760,
-    hogaresConServicio: 410,
-    hogaresSinServicio: 350,
-    ultimaAsignacionFecha: null,
+    code: 'LIM-LIN-004',
+    name: 'Lince Mixto',
+    technology: 'COPPER',
+    classification: 'C',
+    status: 'pending',
+    totalHouseholds: 760,
+    householdsWithService: 410,
+    householdsWithoutService: 350,
+    lastAssignmentDate: null,
   },
   {
     id: 'pol-lima-pueblolibre',
-    codigo: 'LIM-PLB-005',
-    nombre: 'Pueblo Libre',
-    tecnologia: 'HFC',
-    clasificacion: 'B',
-    estado: 'active',
-    totalHogares: 1050,
-    hogaresConServicio: 720,
-    hogaresSinServicio: 330,
-    ultimaAsignacionFecha: '2026-07-08',
+    code: 'LIM-PLB-005',
+    name: 'Pueblo Libre',
+    technology: 'HFC',
+    classification: 'B',
+    status: 'active',
+    totalHouseholds: 1050,
+    householdsWithService: 720,
+    householdsWithoutService: 330,
+    lastAssignmentDate: '2026-07-08',
   },
   {
     id: 'pol-lima-breña',
-    codigo: 'LIM-BRE-006',
-    nombre: 'Breña Central',
-    tecnologia: 'COPPER',
-    clasificacion: 'lejano',
-    estado: 'archived',
-    totalHogares: 540,
-    hogaresConServicio: 380,
-    hogaresSinServicio: 160,
-    ultimaAsignacionFecha: '2026-06-30',
+    code: 'LIM-BRE-006',
+    name: 'Breña Central',
+    technology: 'COPPER',
+    classification: 'far',
+    status: 'archived',
+    totalHouseholds: 540,
+    householdsWithService: 380,
+    householdsWithoutService: 160,
+    lastAssignmentDate: '2026-06-30',
   },
 ] as const;
 
@@ -137,17 +132,17 @@ export const POLYGON_GEOJSON_FIXTURE: PolygonGeoJsonData = (() => {
     const center = POLYGON_CENTERS[info.id] ?? [-77.05, -12.06];
     const half = POLYGON_RADIUS[info.id] ?? 0.005;
     const feature = square(center[0], center[1], half);
-    const color = classificationColor(info.clasificacion);
+    const color = classificationColor(info.classification);
     return {
       ...feature,
       id: info.id,
       properties: {
         id: info.id,
-        codigo: info.codigo,
-        nombre: info.nombre,
-        tecnologia: info.tecnologia,
-        clasificacion: info.clasificacion,
-        estado: info.estado,
+        code: info.code,
+        name: info.name,
+        technology: info.technology,
+        classification: info.classification,
+        status: info.status,
         fill: color.fill,
         stroke: color.stroke,
       },
@@ -165,7 +160,10 @@ export const POLYGON_GEOJSON_FIXTURE: PolygonGeoJsonData = (() => {
  * GeoJsonLayerComponent. The properties bag carries the styling hints so
  * the layer can color polygons without an extra round trip.
  */
-export function polygonsFeatureCollection(): FeatureCollection<Polygon> {
+export function polygonsFeatureCollection(): {
+  type: 'FeatureCollection';
+  features: Feature<Polygon>[];
+} {
   return {
     type: 'FeatureCollection',
     features: POLYGON_GEOJSON_FIXTURE.features.map((feature) => ({

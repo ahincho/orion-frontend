@@ -1,18 +1,20 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   PLATFORM_ID,
   computed,
   effect,
   inject,
   signal,
+  viewChild,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { toObservable } from '@angular/core/rxjs-interop';
 import { TranslatePipe } from '@ngx-translate/core';
-import { firstValueFrom } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import type { Observable } from 'rxjs';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 import { MapShellComponent } from '../../../core/maps/map-shell/map-shell';
 import { GeoJsonLayerComponent } from '../../../core/maps/geojson-layer/geojson-layer';
@@ -35,6 +37,7 @@ import { injectSupervisorsApi } from '../services/supervisors.api';
 import { injectAssignmentsApi } from '../services/assignments.api';
 
 import type {
+  AssignmentByDay,
   PolygonInfoGeneral,
 } from '../../../core/types/assignment.types';
 import type {
@@ -46,7 +49,6 @@ import type { Feature, Geometry } from 'geojson';
 const INITIAL_CENTER: [number, number] = [-77.043, -12.092];
 const INITIAL_ZOOM = 11.5;
 const FREE_MAP_STYLE = 'https://tiles.openfreemap.org/styles/liberty';
-const DEFAULT_DURATION_MIN = 120;
 
 @Component({
   selector: 'orion-assignments-list',
@@ -67,11 +69,11 @@ export class AssignmentsList {
   private readonly supervisorsApi = injectSupervisorsApi();
   private readonly assignmentsApi = injectAssignmentsApi();
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly elementRef = inject(ElementRef<HTMLElement>);
 
   readonly styleUrl = signal<string>(FREE_MAP_STYLE);
   readonly center = signal<[number, number]>(INITIAL_CENTER);
   readonly zoom = signal<number>(INITIAL_ZOOM);
-  readonly supervisorQuery = signal<string>('');
 
   readonly polygonsResult = toSignal(this.polygonsApi.list(), {
     initialValue: undefined,
@@ -79,6 +81,8 @@ export class AssignmentsList {
   readonly distributorsResult = toSignal(this.distributorsApi.list(), {
     initialValue: undefined,
   });
+
+  readonly supervisorQuery = signal<string>('');
 
   private readonly supervisorSearch$ = toObservable(this.supervisorQuery).pipe(
     debounceTime(150),
@@ -139,9 +143,9 @@ export class AssignmentsList {
 
   readonly selectedPolygon = signal<PolygonInfoGeneral | null>(null);
   readonly selectedSupervisorId = signal<string | null>(null);
-  readonly selectedDistribuidorId = signal<string | null>(null);
+  readonly selectedDistributorId = signal<string | null>(null);
   readonly scheduledDate = signal<string>(todayIsoDate());
-  readonly durationMinutes = signal<number>(DEFAULT_DURATION_MIN);
+  readonly durationMinutes = signal<number>(120);
   readonly note = signal<string>('');
   readonly isConfirming = signal<boolean>(false);
   readonly isSubmitting = signal<boolean>(false);
@@ -150,7 +154,7 @@ export class AssignmentsList {
   readonly canConfirmAssignment = computed(() => Boolean(
     this.selectedPolygon() &&
     this.selectedSupervisorId() &&
-    this.selectedDistribuidorId(),
+    this.selectedDistributorId(),
   ));
 
   readonly confirmContext = computed<ConfirmAssignmentContext | null>(() => {
@@ -162,7 +166,7 @@ export class AssignmentsList {
       (entry) => entry.id === this.selectedSupervisorId(),
     );
     const distributor = this.distributors().find(
-      (entry) => entry.id === this.selectedDistribuidorId(),
+      (entry) => entry.id === this.selectedDistributorId(),
     );
     if (!supervisor || !distributor) {
       return null;
@@ -170,14 +174,33 @@ export class AssignmentsList {
     return {
       polygon,
       supervisorId: supervisor.id,
-      supervisorName: supervisor.nombreCompleto,
-      distribuidorId: distributor.id,
-      distribuidorName: distributor.nombre,
-      fechaProgramada: this.scheduledDate(),
-      duracionEstimadaMin: this.durationMinutes(),
-      nota: this.note().trim() === '' ? null : this.note().trim(),
+      supervisorName: supervisor.fullName,
+      distributorId: distributor.id,
+      distributorName: distributor.name,
+      scheduledDate: this.scheduledDate(),
+      estimatedDurationMin: this.durationMinutes(),
+      note: this.note().trim() === '' ? null : this.note().trim(),
     };
   });
+
+  private readonly activePolygonId = signal<string | null>(null);
+
+  readonly summary = computed<AssignmentByDay[]>(() => {
+    return this.polygons().map((polygon) => ({
+      date: this.scheduledDate(),
+      assignedPolygons: polygon.id === this.activePolygonId() ? 1 : 0,
+      assignedHouseholds:
+        polygon.id === this.activePolygonId() ? polygon.totalHouseholds : 0,
+      progressPercent:
+        polygon.id === this.activePolygonId()
+          ? Math.round(
+              (polygon.householdsWithService / polygon.totalHouseholds) * 100,
+            )
+          : 0,
+    }));
+  });
+
+  readonly mapShellRef = viewChild<MapShellComponent>('mapShell');
 
   constructor() {
     if (isPlatformBrowser(this.platformId)) {
@@ -186,8 +209,8 @@ export class AssignmentsList {
 
     effect(() => {
       const distributors = this.distributors();
-      if (distributors.length > 0 && this.selectedDistribuidorId() === null) {
-        this.selectedDistribuidorId.set(distributors[0].id);
+      if (distributors.length > 0 && this.selectedDistributorId() === null) {
+        this.selectedDistributorId.set(distributors[0].id);
       }
     });
   }
@@ -221,6 +244,10 @@ export class AssignmentsList {
   }
 
   protected startConfirm(): void {
+    const polygon = this.selectedPolygon();
+    if (polygon) {
+      this.activePolygonId.set(polygon.id);
+    }
     this.selectedPolygon.set(null);
     this.isConfirming.set(true);
   }
@@ -239,8 +266,8 @@ export class AssignmentsList {
     this.supervisorQuery.set('');
   }
 
-  protected onSelectDistribuidor(distribuidorId: string): void {
-    this.selectedDistribuidorId.set(distribuidorId);
+  protected onSelectDistributor(distribuidorId: string): void {
+    this.selectedDistributorId.set(distribuidorId);
   }
 
   protected onDateChange(value: string): void {
@@ -269,12 +296,12 @@ export class AssignmentsList {
     try {
       const response = await firstValueFrom(
         this.assignmentsApi.createBatch({
-          poligonos: [context.polygon.id],
+          polygons: [context.polygon.id],
           supervisorId: context.supervisorId,
-          distribuidorId: context.distribuidorId,
-          fechaProgramada: context.fechaProgramada,
-          duracionEstimadaMin: context.duracionEstimadaMin,
-          nota: context.nota,
+          distributorId: context.distributorId,
+          scheduledDate: context.scheduledDate,
+          estimatedDurationMin: context.estimatedDurationMin,
+          note: context.note,
         }),
       );
       if (!isSuccess(response)) {
@@ -294,4 +321,21 @@ export class AssignmentsList {
 
 function todayIsoDate(): string {
   return new Date().toISOString().slice(0, 10);
+}
+
+function firstValueFrom<T>(
+  source: Observable<T>,
+): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const subscription = source.subscribe({
+      next: (value) => {
+        subscription.unsubscribe();
+        resolve(value);
+      },
+      error: (cause) => {
+        subscription.unsubscribe();
+        reject(cause);
+      },
+    });
+  });
 }

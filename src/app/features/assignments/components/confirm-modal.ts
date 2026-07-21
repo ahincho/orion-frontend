@@ -12,11 +12,11 @@ export interface ConfirmAssignmentContext {
   readonly polygon: PolygonInfoGeneral;
   readonly supervisorId: string;
   readonly supervisorName: string;
-  readonly distribuidorId: string;
-  readonly distribuidorName: string;
-  readonly fechaProgramada: string;
-  readonly duracionEstimadaMin: number;
-  readonly nota: string | null;
+  readonly distributorId: string;
+  readonly distributorName: string;
+  readonly scheduledDate: string;
+  readonly estimatedDurationMin: number;
+  readonly note: string | null;
 }
 
 /**

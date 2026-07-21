@@ -7,20 +7,20 @@ import type { DailySummary } from '../../../core/types/my-routes.types';
 
 const SUMMARIES: Record<string, DailySummary> = {
   '2026-07-21': {
-    fecha: '2026-07-21',
-    totalHogares: 100,
-    hogaresCompletados: 80,
-    hogaresPendientes: 20,
-    porcentajeAvance: 80,
-    tecnologia: 'GPON',
+    date: '2026-07-21',
+    totalHouseholds: 100,
+    householdsCompleted: 80,
+    householdsPending: 20,
+    progressPercent: 80,
+    technology: 'GPON',
   },
   '2026-07-22': {
-    fecha: '2026-07-22',
-    totalHogares: 200,
-    hogaresCompletados: 0,
-    hogaresPendientes: 200,
-    porcentajeAvance: 0,
-    tecnologia: 'HFC',
+    date: '2026-07-22',
+    totalHouseholds: 200,
+    householdsCompleted: 0,
+    householdsPending: 200,
+    progressPercent: 0,
+    technology: 'HFC',
   },
 };
 

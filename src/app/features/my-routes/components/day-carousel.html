@@ -9,9 +9,9 @@
       (click)="onPick(day.fecha)"
     >
       <span class="day-carousel__label">{{ day.label }}</span>
-      <span class="day-carousel__summary">
+        <span class="day-carousel__summary">
         @if (day.summary) {
-          {{ day.summary.hogaresCompletados }}/{{ day.summary.totalHogares }}
+          {{ day.summary.householdsCompleted }}/{{ day.summary.totalHouseholds }}
         } @else {
           —
         }
