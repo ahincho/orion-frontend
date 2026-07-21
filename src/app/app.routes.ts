@@ -31,7 +31,7 @@ export const routes: Routes = [
         title: 'ORION · Asignación de Censos',
       },
       {
-        path: 'my-routes',
+        path: 'routes',
         loadChildren: () =>
           import('./features/my-routes/my-routes.routes').then((m) => m.MY_ROUTES_ROUTES),
         title: 'ORION · Mi Ruta',
