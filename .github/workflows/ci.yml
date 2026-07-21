@@ -71,8 +71,15 @@ jobs:
   # ---------- local: unit tests (vitest) -----------------------------
   # Angular 22's unit-test builder is not yet exposed as a reusable from
   # spark-match-01-devops, so we run it inline. The recipe is short and
-  # stable (npm ci -> npm run test -- --watch=false --browsers=ChromeHeadless
-  # via the @angular/build:unit-test builder).
+  # stable (npm ci -> npm run test -- --watch=false via the
+  # @angular/build:unit-test builder).
+  #
+  # npm cache: usamos `cache: 'npm'` + `cache-dependency-path` del
+  # built-in `actions/setup-node` (en lugar de `actions/cache@v6` manual).
+  # Esto simplifica el workflow y mantiene el comportamiento equivalente.
+  # Si en el futuro se necesita segregar cache por environment, este job
+  # deberia migrar a un reusable (e.g. `node-test.yml` en spark-match) que
+  # acepte `environment-name` y lo use en la cache key.
   test:
     name: unit tests
     runs-on: ubuntu-latest
@@ -81,18 +88,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Setup Node.js 24
+      - name: Setup Node.js 24 + cache npm
         uses: actions/setup-node@v7
         with:
           node-version: '24'
-
-      - name: Cache npm dependencies
-        uses: actions/cache@v6
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node24-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node24-
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
 
       - name: Install dependencies
         run: npm ci
