@@ -43,7 +43,7 @@ permissions:
 jobs:
   deploy:
     name: Deploy (dev)
-    uses: spark-match/spark-match-01-devops/.github/workflows/angular-spa-deploy.yml@main
+    uses: spark-match/spark-match-01-devops/.github/workflows/angular-spa-deploy.yml@main  # yamllint disable-line rule:line-length
     secrets:
       AWS_DEPLOY_ROLE_ARN: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
     with:
@@ -56,7 +56,7 @@ jobs:
       # del stage dev (e.g. https://api.dev.orion.com). Por ahora, mientras
       # el backend no este desplegado, queda vacio (SPA renderiza con mocks).
       api-url: ${{ vars.API_URL }}
-      # Pin Angular 22 + Node 24 (default del reusable, lo declaramos explicito).
+      # Pin Angular 22 + Node 24 (default, declarado explicito).
       node-version: '24'
       build-script: build
       artifact-path: dist/orion-frontend/browser

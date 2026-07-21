@@ -11,7 +11,7 @@
 #   - gitleaks     :: secret history     (ecosystem)
 #   - yamllint     :: YAML lint          (ecosystem)
 #   - eslint       :: npm run lint       (node, angular-eslint flat config)
-#   - test         :: npm run test       (local: vitest via @angular/build:unit-test)
+#   - test         :: npm run test       (local: vitest via @angular/build)
 #
 # Pin: @main. The reusables were promoted from @dev -> @main in
 # spark-match-01-devops PR #45 (end-to-end validated against
@@ -37,11 +37,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # ---------- ecosystem reusables ------------------------------------------------
+  # ---------- ecosystem reusables ---------------------------------------
 
   actionlint:
     name: actionlint
-    uses: spark-match/spark-match-01-devops/.github/workflows/actionlint.yml@main
+    uses: spark-match/spark-match-01-devops/.github/workflows/actionlint.yml@main  # yamllint disable-line rule:line-length
     with:
       environment-name: ci
 
@@ -57,7 +57,7 @@ jobs:
     with:
       environment-name: ci
 
-  # ---------- node reusables -----------------------------------------------------
+  # ---------- node reusables --------------------------------------------
 
   eslint:
     name: eslint
@@ -68,7 +68,7 @@ jobs:
       lint-script: lint
       working-directory: '.'
 
-  # ---------- local: unit tests (vitest via @angular/build:unit-test) ----------
+  # ---------- local: unit tests (vitest) -----------------------------
   # Angular 22's unit-test builder is not yet exposed as a reusable from
   # spark-match-01-devops, so we run it inline. The recipe is short and
   # stable (npm ci -> npm run test -- --watch=false --browsers=ChromeHeadless
@@ -105,6 +105,5 @@ jobs:
 
       - name: Run unit tests
         # vitest es el runner de @angular/build:unit-test en Angular 22.
-        # --watch=false para que termine en CI. --run solo corre los tests
-        # sin modo watch.
-        run: npm test -- --watch=false --run
+        # --watch=false para que termine en CI.
+        run: npm test -- --watch=false
