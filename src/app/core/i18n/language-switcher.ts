@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { LanguageService } from './language.service';
@@ -57,24 +57,23 @@ import { SUPPORTED_LANGUAGES, type Language } from './i18n.types';
       color: inherit;
       font-weight: 600;
       font-size: 0.875rem;
-      cursor: pointer;
-      transition: background-color 120ms ease;
-    }
+    cursor: pointer;
+    transition: background-color 120ms ease;
+  }
 
-    .language-switcher__option:hover {
-      background: rgba(79, 70, 229, 0.15);
-    }
+  .language-switcher__option:hover {
+    background: rgba(79, 70, 229, 0.15);
+  }
 
-    .language-switcher__option--active {
-      background: #4f46e5;
-      color: #f8fafc;
-    }
+  .language-switcher__option--active {
+    background: #4f46e5;
+    color: #f8fafc;
+  }
 
-    .language-switcher__option--active:hover {
-      background: #6366f1;
-    }
+  .language-switcher__option--active:hover {
+    background: #6366f1;
+  }
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LanguageSwitcherComponent {
   private readonly service = inject(LanguageService);
