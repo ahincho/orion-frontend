@@ -1,24 +1,31 @@
 <section class="maps-spike">
   <header class="maps-spike__header">
     <div>
-      <p class="maps-spike__eyebrow">Spike · MapLibre GL JS</p>
-      <h1 class="maps-spike__title">Renderizado de mapa base</h1>
+      <p class="maps-spike__eyebrow">Spike &middot; MapLibre GL JS</p>
+      <h1 class="maps-spike__title">Map base rendering</h1>
       <p class="maps-spike__subtitle">
-        Validación previa a la Fase 1. Drag the red marker para confirmar que
-        el motor responde a eventos del browser.
+        Drag the red marker to confirm the engine responds to browser
+        events.
       </p>
     </div>
     <span
       class="maps-spike__badge"
-      [class.maps-spike__badge--ready]="status() === 'ready'"
-      [class.maps-spike__badge--loading]="status() === 'loading'"
-      [class.maps-spike__badge--error]="status() === 'error'"
+      [class.maps-spike__badge--ready]="mapShell.status() === 'ready'"
+      [class.maps-spike__badge--loading]="mapShell.status() === 'loading'"
+      [class.maps-spike__badge--error]="mapShell.status() === 'error'"
     >
-      {{ status() }}
+      {{ mapShell.status() }}
     </span>
   </header>
 
-  <div #host class="maps-spike__canvas"></div>
+  <orion-map-shell
+    #mapShell
+    class="maps-spike__canvas"
+    [styleUrl]="styleUrl()"
+    [center]="center()"
+    [zoom]="zoom()"
+    (mapReady)="onMapReady($event)"
+  />
 
   <footer class="maps-spike__footer">
     <dl class="maps-spike__coords">
@@ -36,7 +43,7 @@
       </div>
     </dl>
     <button type="button" class="maps-spike__reset" (click)="reset()">
-      Centrar en Lima
+      Center on Lima
     </button>
   </footer>
 </section>
