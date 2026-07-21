@@ -42,7 +42,7 @@ export class AssignmentsApi {
     return this.client.post<
       CreateAssignmentBatchRequest,
       CreateAssignmentBatchResponse
-    >('/api/v1/asignacion-rutas/asignaciones', request);
+    >('/api/v1/assignments', request);
   }
 }
 

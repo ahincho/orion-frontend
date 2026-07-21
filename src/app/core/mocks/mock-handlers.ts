@@ -79,7 +79,7 @@ export const mockBackendHandlers: readonly MockBackendHandler[] = [
     id: 'list-polygons',
     method: 'GET',
     matchKind: 'exact',
-    pattern: '/api/v1/regional/poligonos',
+    pattern: '/api/v1/polygons',
     delayMs: 120,
     resolve: () => ({
       ...polygonsFeatureCollection(),
@@ -90,7 +90,7 @@ export const mockBackendHandlers: readonly MockBackendHandler[] = [
     id: 'list-distributors',
     method: 'GET',
     matchKind: 'exact',
-    pattern: '/api/v1/asignacion-rutas/distribuidores',
+    pattern: '/api/v1/distributors',
     delayMs: 80,
     resolve: () => ({
       total: DISTRIBUTOR_FIXTURES.length,
@@ -101,7 +101,7 @@ export const mockBackendHandlers: readonly MockBackendHandler[] = [
     id: 'list-supervisors',
     method: 'GET',
     matchKind: 'prefix',
-    pattern: '/api/v1/asignacion-rutas/supervisores',
+    pattern: '/api/v1/supervisors',
     delayMs: 80,
     resolve: (request) => {
       const query = request.params.get('q')?.trim().toLowerCase() ?? '';
@@ -127,7 +127,7 @@ export const mockBackendHandlers: readonly MockBackendHandler[] = [
     id: 'create-assignment',
     method: 'POST',
     matchKind: 'exact',
-    pattern: '/api/v1/asignacion-rutas/asignaciones',
+    pattern: '/api/v1/assignments',
     delayMs: 220,
     resolve: (request) => {
       const body = request.body as unknown;
@@ -167,7 +167,7 @@ export const mockBackendHandlers: readonly MockBackendHandler[] = [
     id: 'my-routes',
     method: 'GET',
     matchKind: 'exact',
-    pattern: '/api/v1/asignacion-rutas/mi-ruta',
+    pattern: '/api/v1/my-routes',
     delayMs: 160,
     resolve: () => MY_ROUTES_FIXTURE,
   },

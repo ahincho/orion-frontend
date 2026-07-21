@@ -20,7 +20,7 @@ export class DistributorsApi {
 
   list(): Observable<Result<ListResponse<DistribuidorZona>>> {
     return this.client.get<ListResponse<DistribuidorZona>>(
-      '/api/v1/asignacion-rutas/distribuidores',
+      '/api/v1/distributors',
     );
   }
 }
