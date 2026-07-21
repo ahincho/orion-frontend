@@ -6,6 +6,7 @@ import {
 } from './fixtures/polygons.fixture';
 import { DISTRIBUTOR_FIXTURES } from './fixtures/distributors.fixture';
 import { SUPERVISOR_FIXTURES } from './fixtures/supervisors.fixture';
+import { MY_ROUTES_FIXTURE } from './fixtures/my-routes.fixture';
 
 /**
  * Single registry entry: every mock URL handler the front-end falls back to
@@ -161,5 +162,13 @@ export const mockBackendHandlers: readonly MockBackendHandler[] = [
         total: storedAssignments.length,
       };
     },
+  },
+  {
+    id: 'my-routes',
+    method: 'GET',
+    matchKind: 'exact',
+    pattern: '/api/v1/asignacion-rutas/mi-ruta',
+    delayMs: 160,
+    resolve: () => MY_ROUTES_FIXTURE,
   },
 ];

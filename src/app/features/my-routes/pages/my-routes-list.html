@@ -1,0 +1,71 @@
+<section class="my-routes">
+  <header class="my-routes__header">
+    <div>
+      <p class="my-routes__eyebrow">{{ 'myRoutes.header.eyebrow' | translate }}</p>
+      <h1 class="my-routes__title">{{ 'myRoutes.header.title' | translate }}</h1>
+      <p class="my-routes__subtitle">{{ 'myRoutes.header.subtitle' | translate }}</p>
+    </div>
+    <span
+      class="my-routes__badge"
+      [class.my-routes__badge--ready]="status() === 'ready'"
+      [class.my-routes__badge--loading]="status() === 'loading'"
+      [class.my-routes__badge--error]="status() === 'error'"
+    >
+      {{ status() }}
+    </span>
+  </header>
+
+  @if (renderableAssignment(); as assignment) {
+    <orion-day-carousel
+      [days]="days()"
+      [selectedDate]="selectedDate()"
+      (pickDay)="onPickDay($event)"
+    />
+
+    <div class="my-routes__grid">
+      <aside class="my-routes__side">
+        <section class="my-routes__panel">
+          <h2 class="my-routes__panel-title">
+            {{ 'myRoutes.summary.title' | translate }}
+          </h2>
+          <p class="my-routes__summary">
+            {{ assignment.summary }}
+          </p>
+        </section>
+
+        <orion-gps-watch
+          (locationUpdate)="onUserLocation($event)"
+          (errorUpdate)="onGpsError($event)"
+        />
+
+        @if (validationIssue(); as issue) {
+          <p class="my-routes__warning" role="alert">
+            {{ 'myRoutes.warnings.outsidePolygon' | translate }} ({{ issue }})
+          </p>
+        }
+      </aside>
+
+      <div class="my-routes__canvas">
+        <orion-map-shell
+          #mapShell
+          [styleUrl]="styleUrl()"
+          [center]="center()"
+          [zoom]="zoom()"
+        />
+        @if (featureCollection(); as data) {
+          <orion-geojson-layer
+            id="my-routes-polygon"
+            [map]="mapShell.map()"
+            [data]="data"
+            [styleFn]="polygonStyleFn"
+            [fillOpacity]="0.35"
+          />
+        }
+      </div>
+    </div>
+  } @else {
+    <p class="my-routes__empty">
+      {{ 'common.empty' | translate }}
+    </p>
+  }
+</section>

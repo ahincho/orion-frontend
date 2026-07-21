@@ -48,5 +48,19 @@
   "assignments.confirm.note": "Notes",
   "assignments.confirm.confirmAction": "Confirm and submit",
   "assignments.warnings.invalidGeometry": "There are {{ count }} polygons with invalid geometry that cannot be assigned.",
-  "assignments.busy.submitting": "Submitting assignment…"
+  "assignments.busy.submitting": "Submitting assignment…",
+  "myRoutes.header.eyebrow": "Weekly route",
+  "myRoutes.header.title": "My Routes",
+  "myRoutes.header.subtitle": "Pick a day to see the assigned polygon, the vendor list, and validate your location.",
+  "myRoutes.carousel.ariaLabel": "Days of the week",
+  "myRoutes.summary.title": "Day summary",
+  "myRoutes.gps.title": "My location",
+  "myRoutes.gps.idle": "Idle",
+  "myRoutes.gps.watching": "Tracking",
+  "myRoutes.gps.lng": "Longitude",
+  "myRoutes.gps.lat": "Latitude",
+  "myRoutes.gps.heading": "Heading",
+  "myRoutes.gps.start": "Start tracking",
+  "myRoutes.gps.stop": "Stop tracking",
+  "myRoutes.warnings.outsidePolygon": "Location outside of the assigned polygon."
 }

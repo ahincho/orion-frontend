@@ -3,7 +3,7 @@ import type { Feature, Point, Polygon } from 'geojson';
 import type { LngLat } from './geo.types';
 import type { Technology } from './technology.types';
 
-export interface ResumenDiario {
+export interface DailySummary {
   readonly fecha: string;
   readonly totalHogares: number;
   readonly hogaresCompletados: number;
@@ -12,7 +12,7 @@ export interface ResumenDiario {
   readonly tecnologia: Technology;
 }
 
-export interface VendorEncuesta {
+export interface VendorSurvey {
   readonly id: string;
   readonly hogarId: string;
   readonly direccion: string;
@@ -28,7 +28,7 @@ export interface VendorEncuesta {
   readonly coordenadas: LngLat;
 }
 
-export interface AsignacionSieteDias {
+export interface WeeklyAssignment {
   readonly fecha: string;
   readonly poligonoId: string;
   readonly poligonoNombre: string;
@@ -37,12 +37,12 @@ export interface AsignacionSieteDias {
   readonly completado: boolean;
   readonly geometria: Feature<Polygon>;
   readonly puntoAcceso: Feature<Point>;
-  readonly vendors: readonly VendorEncuesta[];
+  readonly vendors: readonly VendorSurvey[];
 }
 
-export interface SieteDiasResponse {
+export interface WeeklyRoutesResponse {
   readonly usuarioId: string;
   readonly generadoEn: string;
-  readonly resumen: readonly ResumenDiario[];
-  readonly asignaciones: readonly AsignacionSieteDias[];
+  readonly resumen: readonly DailySummary[];
+  readonly asignaciones: readonly WeeklyAssignment[];
 }
