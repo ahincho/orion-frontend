@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   ElementRef,
   PLATFORM_ID,
@@ -22,28 +21,16 @@ import { isValidPolygon } from '../../../core/types/geo.utils';
 import { isSuccess } from '../../../core/http/result';
 
 import { PolygonInfoModal } from '../components/polygon-info-modal';
-import {
-  ConfirmModal,
-  type ConfirmAssignmentContext,
-} from '../components/confirm-modal';
-import {
-  resolvePolygonStyle,
-  readPolygonPropertyId,
-} from '../../../core/maps/polygon-style.fn';
+import { ConfirmModal, type ConfirmAssignmentContext } from '../components/confirm-modal';
+import { resolvePolygonStyle, readPolygonPropertyId } from '../../../core/maps/polygon-style.fn';
 
 import { injectPolygonsApi } from '../services/polygons.api';
 import { injectDistributorsApi } from '../services/distributors.api';
 import { injectSupervisorsApi } from '../services/supervisors.api';
 import { injectAssignmentsApi } from '../services/assignments.api';
 
-import type {
-  AssignmentByDay,
-  PolygonInfoGeneral,
-} from '../../../core/types/assignment.types';
-import type {
-  DistribuidorZona,
-  Supervisor,
-} from '../../../core/types/assignment.types';
+import type { AssignmentByDay, PolygonInfoGeneral } from '../../../core/types/assignment.types';
+import type { DistribuidorZona, Supervisor } from '../../../core/types/assignment.types';
 import type { Feature, Geometry } from 'geojson';
 
 const INITIAL_CENTER: [number, number] = [-77.043, -12.092];
@@ -54,7 +41,6 @@ const FREE_MAP_STYLE = 'https://tiles.openfreemap.org/styles/liberty';
   selector: 'orion-assignments-list',
   host: { class: 'block h-full' },
   templateUrl: './assignments-list.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MapShellComponent,
     GeoJsonLayerComponent,
@@ -118,9 +104,7 @@ export class AssignmentsList {
     if (!result || !isSuccess(result)) {
       return 0;
     }
-    return result.data.features.filter(
-      (feature) => !isValidPolygon(feature).ok,
-    ).length;
+    return result.data.features.filter((feature) => !isValidPolygon(feature).ok).length;
   });
 
   readonly distributors = computed<readonly DistribuidorZona[]>(() => {
@@ -151,20 +135,16 @@ export class AssignmentsList {
   readonly isSubmitting = signal<boolean>(false);
   readonly feedbackMessage = signal<string | null>(null);
 
-  readonly canConfirmAssignment = computed(() => Boolean(
-    this.selectedPolygon() &&
-    this.selectedSupervisorId() &&
-    this.selectedDistributorId(),
-  ));
+  readonly canConfirmAssignment = computed(() =>
+    Boolean(this.selectedPolygon() && this.selectedSupervisorId() && this.selectedDistributorId()),
+  );
 
   readonly confirmContext = computed<ConfirmAssignmentContext | null>(() => {
     const polygon = this.selectedPolygon();
     if (!polygon) {
       return null;
     }
-    const supervisor = this.supervisors().find(
-      (entry) => entry.id === this.selectedSupervisorId(),
-    );
+    const supervisor = this.supervisors().find((entry) => entry.id === this.selectedSupervisorId());
     const distributor = this.distributors().find(
       (entry) => entry.id === this.selectedDistributorId(),
     );
@@ -189,13 +169,10 @@ export class AssignmentsList {
     return this.polygons().map((polygon) => ({
       date: this.scheduledDate(),
       assignedPolygons: polygon.id === this.activePolygonId() ? 1 : 0,
-      assignedHouseholds:
-        polygon.id === this.activePolygonId() ? polygon.totalHouseholds : 0,
+      assignedHouseholds: polygon.id === this.activePolygonId() ? polygon.totalHouseholds : 0,
       progressPercent:
         polygon.id === this.activePolygonId()
-          ? Math.round(
-              (polygon.householdsWithService / polygon.totalHouseholds) * 100,
-            )
+          ? Math.round((polygon.householdsWithService / polygon.totalHouseholds) * 100)
           : 0,
     }));
   });
@@ -215,8 +192,7 @@ export class AssignmentsList {
     });
   }
 
-  protected readonly polygonStyleFn = (feature: Feature<Geometry>) =>
-    resolvePolygonStyle(feature);
+  protected readonly polygonStyleFn = (feature: Feature<Geometry>) => resolvePolygonStyle(feature);
 
   protected getInputValue(event: Event): string {
     const target = event.target as HTMLInputElement | null;
@@ -308,9 +284,7 @@ export class AssignmentsList {
         this.feedbackMessage.set(`Error: ${response.message}`);
         return;
       }
-      this.feedbackMessage.set(
-        `Asignación creada (${response.data.batch.id})`,
-      );
+      this.feedbackMessage.set(`Asignación creada (${response.data.batch.id})`);
       this.isConfirming.set(false);
       this.note.set('');
     } finally {
@@ -323,9 +297,7 @@ function todayIsoDate(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
-function firstValueFrom<T>(
-  source: Observable<T>,
-): Promise<T> {
+function firstValueFrom<T>(source: Observable<T>): Promise<T> {
   return new Promise<T>((resolve, reject) => {
     const subscription = source.subscribe({
       next: (value) => {

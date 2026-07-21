@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  input,
-  output,
-} from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import type { PolygonInfoGeneral } from '../../../core/types/assignment.types';
@@ -17,7 +12,6 @@ import type { PolygonInfoGeneral } from '../../../core/types/assignment.types';
   selector: 'orion-polygon-info-modal',
   templateUrl: './polygon-info-modal.html',
   host: { class: 'block' },
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [TranslatePipe],
 })
 export class PolygonInfoModal {

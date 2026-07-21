@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  input,
-  output,
-} from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import type { PolygonInfoGeneral } from '../../../core/types/assignment.types';
@@ -29,7 +24,6 @@ export interface ConfirmAssignmentContext {
   selector: 'orion-confirm-modal',
   templateUrl: './confirm-modal.html',
   host: { class: 'block' },
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [TranslatePipe],
 })
 export class ConfirmModal {

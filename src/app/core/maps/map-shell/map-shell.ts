@@ -1,9 +1,5 @@
-import type {
-  AfterViewInit,
-  ElementRef,
-  OnDestroy} from '@angular/core';
+import type { AfterViewInit, ElementRef, OnDestroy } from '@angular/core';
 import {
-  ChangeDetectionStrategy,
   Component,
   PLATFORM_ID,
   effect,
@@ -36,7 +32,6 @@ import maplibregl, {
   selector: 'orion-map-shell',
   templateUrl: './map-shell.html',
   host: { class: 'relative block h-full w-full min-h-60' },
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapShellComponent implements AfterViewInit, OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
@@ -93,9 +88,7 @@ export class MapShellComponent implements AfterViewInit, OnDestroy {
         zoom: this.zoom(),
         maxBounds: this.maxBounds() ?? undefined,
         interactive: this.interactive(),
-        attributionControl: this.showAttribution()
-          ? { compact: true }
-          : false,
+        attributionControl: this.showAttribution() ? { compact: true } : false,
       });
 
       instance.on('load', () => {
