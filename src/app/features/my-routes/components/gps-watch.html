@@ -1,28 +1,28 @@
 <div class="gps-watch">
   <header class="gps-watch__header">
     <span class="gps-watch__title">
-      {{ 'myRoutes.gps.title' | translate }}
+      {{ 'routes.gps.title' | translate }}
     </span>
     <span
       class="gps-watch__status"
       [class.gps-watch__status--on]="isWatching()"
       [class.gps-watch__status--off]="!isWatching()"
     >
-      {{ isWatching() ? ('myRoutes.gps.watching' | translate) : ('myRoutes.gps.idle' | translate) }}
+      {{ isWatching() ? ('routes.gps.watching' | translate) : ('routes.gps.idle' | translate) }}
     </span>
   </header>
 
   <dl class="gps-watch__readout">
     <div>
-      <dt>{{ 'myRoutes.gps.lng' | translate }}</dt>
+      <dt>{{ 'routes.gps.lng' | translate }}</dt>
       <dd>{{ currentPosition()?.[0]?.toFixed(6) ?? '—' }}</dd>
     </div>
     <div>
-      <dt>{{ 'myRoutes.gps.lat' | translate }}</dt>
+      <dt>{{ 'routes.gps.lat' | translate }}</dt>
       <dd>{{ currentPosition()?.[1]?.toFixed(6) ?? '—' }}</dd>
     </div>
     <div>
-      <dt>{{ 'myRoutes.gps.heading' | translate }}</dt>
+      <dt>{{ 'routes.gps.heading' | translate }}</dt>
       <dd>{{ headingDegrees().toFixed(0) }}°</dd>
     </div>
   </dl>
@@ -34,7 +34,7 @@
         class="gps-watch__stop"
         (click)="stopWatching()"
       >
-        {{ 'myRoutes.gps.stop' | translate }}
+        {{ 'routes.gps.stop' | translate }}
       </button>
     } @else {
       <button
@@ -42,7 +42,7 @@
         class="gps-watch__start"
         (click)="startWatching()"
       >
-        {{ 'myRoutes.gps.start' | translate }}
+        {{ 'routes.gps.start' | translate }}
       </button>
     }
   </footer>

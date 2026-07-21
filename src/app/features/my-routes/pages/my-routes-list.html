@@ -1,9 +1,9 @@
 <section class="my-routes">
   <header class="my-routes__header">
     <div>
-      <p class="my-routes__eyebrow">{{ 'myRoutes.header.eyebrow' | translate }}</p>
-      <h1 class="my-routes__title">{{ 'myRoutes.header.title' | translate }}</h1>
-      <p class="my-routes__subtitle">{{ 'myRoutes.header.subtitle' | translate }}</p>
+      <p class="my-routes__eyebrow">{{ 'routes.header.eyebrow' | translate }}</p>
+      <h1 class="my-routes__title">{{ 'routes.header.title' | translate }}</h1>
+      <p class="my-routes__subtitle">{{ 'routes.header.subtitle' | translate }}</p>
     </div>
     <span
       class="my-routes__badge"
@@ -26,7 +26,7 @@
       <aside class="my-routes__side">
         <section class="my-routes__panel">
           <h2 class="my-routes__panel-title">
-            {{ 'myRoutes.summary.title' | translate }}
+            {{ 'routes.summary.title' | translate }}
           </h2>
           <p class="my-routes__summary">
             {{ assignment.summary }}
@@ -40,7 +40,7 @@
 
         @if (validationIssue(); as issue) {
           <p class="my-routes__warning" role="alert">
-            {{ 'myRoutes.warnings.outsidePolygon' | translate }} ({{ issue }})
+            {{ 'routes.warnings.outsidePolygon' | translate }} ({{ issue }})
           </p>
         }
       </aside>

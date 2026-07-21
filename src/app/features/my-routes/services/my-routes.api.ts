@@ -14,7 +14,7 @@ export class MyRoutesApi {
   }
 
   week(): Observable<Result<WeeklyRoutesResponse>> {
-    return this.client.get<WeeklyRoutesResponse>('/api/v1/my-routes');
+    return this.client.get<WeeklyRoutesResponse>('/api/v1/routes');
   }
 }
 

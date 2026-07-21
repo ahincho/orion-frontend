@@ -158,10 +158,10 @@ export const mockBackendHandlers: readonly MockBackendHandler[] = [
     },
   },
   {
-    id: 'my-routes',
+    id: 'routes',
     method: 'GET',
     matchKind: 'exact',
-    pattern: '/api/v1/my-routes',
+    pattern: '/api/v1/routes',
     delayMs: 160,
     resolve: () => MY_ROUTES_FIXTURE,
   },
