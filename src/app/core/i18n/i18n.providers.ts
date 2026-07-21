@@ -38,19 +38,27 @@ export class AssetsTranslateLoader implements TranslateLoader {
  * Standalone i18n providers. Wires `@ngx-translate/core` against the runtime
  * JSON dictionaries under `/assets/i18n/<lang>.json` and seeds the active
  * language once TranslateService is ready.
+ *
+ * `inject()` can only be called from an active injection context. This helper
+ * is invoked from the `providers:` array of `ApplicationConfig`, which is
+ * evaluated *before* the application injector exists, so calls to `inject()`
+ * at the top of this function would throw NG0203. The translation choices
+ * are resolved inside the `provideAppInitializer` factory, which Angular
+ * runs once an injector is available.
  */
 export function provideI18n() {
-  const language = inject(LanguageService);
-  const translate = inject(TranslateService);
   return [
     provideTranslateService({
-      lang: language.current(),
+      lang: DEFAULT_LANGUAGE,
       fallbackLang: DEFAULT_LANGUAGE,
       loader: AssetsTranslateLoader,
     }),
     provideAppInitializer(() => {
+      const language = inject(LanguageService);
+      const translate = inject(TranslateService);
+      const current = language.current();
       translate.addLangs([...language.languages()]);
-      return translate.use(language.current()).toPromise();
+      return translate.use(current);
     }),
   ];
 }
