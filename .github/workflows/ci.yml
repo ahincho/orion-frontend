@@ -3,15 +3,14 @@
 # =============================================================================
 # Pull request linter + test runner. Calls the ecosystem + node reusables
 # from `spark-match/spark-match-01-devops/.github/workflows/...` (all pinned
-# `@main` per AGENTS.md). Also runs the Angular unit tests via npm locally
-# because vitest is the unit-test runner for Angular 22 (not a reusable).
+# `@main` per AGENTS.md).
 #
 # Jobs:
 #   - actionlint   :: GH Actions syntax  (ecosystem)
 #   - gitleaks     :: secret history     (ecosystem)
 #   - yamllint     :: YAML lint          (ecosystem)
 #   - eslint       :: npm run lint       (node, angular-eslint flat config)
-#   - test         :: npm run test       (local: vitest via @angular/build)
+#   - test         :: npm run test       (node, vitest via @angular/build)
 #
 # Pin: @main. The reusables were promoted from @dev -> @main in
 # spark-match-01-devops PR #45 (end-to-end validated against
@@ -68,55 +67,15 @@ jobs:
       lint-script: lint
       working-directory: '.'
 
-  # ---------- local: unit tests (vitest) -----------------------------
-  # Angular 22's unit-test builder is not yet exposed as a reusable from
-  # spark-match-01-devops, so we run it inline. The recipe is short and
-  # stable (npm ci -> npm run test -- --watch=false via the
-  # @angular/build:unit-test builder).
-  #
-  # npm cache: usamos `cache: 'npm'` + `cache-dependency-path` del
-  # built-in `actions/setup-node` (en lugar de `actions/cache@v6` manual).
-  # Esto simplifica el workflow y mantiene el comportamiento equivalente.
-  # Si en el futuro se necesita segregar cache por environment, este job
-  # deberia migrar a un reusable (e.g. `node-test.yml` en spark-match) que
-  # acepte `environment-name` y lo use en la cache key.
+  # The Angular 22 unit-test builder (vitest via @angular/build:unit-test)
+  # is exposed through the new node-test.yml reusable. We pass pre-test-script
+  # to invoke the prebuild hook (which materializes api-config.generated.ts
+  # from API_URL) and the test-script override to add --watch=false.
   test:
     name: unit tests
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: Setup Node.js 24
-        uses: actions/setup-node@v7
-        with:
-          node-version: '24'
-          # Disable setup-node's built-in npm cache. We manage the cache
-          # explicitly in the next step to enforce the canonical convention
-          # `<os>-node-<nodeVersion>-<pkgmanager>-<env>-<H>` shared with the
-          # rest of the ORION + spark-match ecosystem. environment-name is
-          # set to "ci" so prod deploys (when added) get a separate cache.
-          package-manager-cache: false
-
-      - name: Cache npm dependencies
-        uses: actions/cache@v6
-        with:
-          path: ~/.npm
-          key: linux-node24-npm-ci-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            linux-node24-npm-ci-
-
-      - name: Install dependencies
-        run: npm ci
-
-      # El prebuild hook genera src/environments/api-config.generated.ts
-      # a partir de API_URL. Los tests no llaman al backend, asi que
-      # dejamos API_URL vacio para que la config generada tenga "".
-      - name: Generate API config (prebuild hook)
-        run: npm run prebuild
-
-      - name: Run unit tests
-        # vitest es el runner de @angular/build:unit-test en Angular 22.
-        # --watch=false para que termine en CI.
-        run: npm test -- --watch=false
+    uses: spark-match/spark-match-01-devops/.github/workflows/node-test.yml@main  # yamllint disable-line rule:line-length
+    with:
+      environment-name: ci
+      pre-test-script: prebuild
+      test-script: test -- --watch=false
+      working-directory: '.'
