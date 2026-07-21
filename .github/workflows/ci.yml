@@ -79,4 +79,3 @@ jobs:
       pre-test-script: prebuild
       test-script: test -- --watch=false
       working-directory: '.'
-
