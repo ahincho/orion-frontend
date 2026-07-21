@@ -1,6 +1,11 @@
 # Dependabot configuration for orion-frontend.
 # - Weekly npm bumps (Angular, ESLint, etc.).
 # - Weekly GitHub Actions bumps (actions/checkout, setup-node, etc.).
+#
+# npm groups keep Angular + ESLint ecosystems in single PRs so reviewers
+# see a coherent batch. GitHub Actions is grouped by origin so consumers
+# can update major deps (aws-actions/*) independently from patch
+# maintenance (actions/*).
 version: 2
 updates:
   - package-ecosystem: "npm"
@@ -32,3 +37,11 @@ updates:
     open-pull-requests-limit: 5
     commit-message:
       prefix: "ci"
+    groups:
+      aws-actions:
+        patterns:
+          - "aws-actions/*"
+      actions-ecosystem:
+        patterns:
+          - "actions/*"
+          - "github/*"
