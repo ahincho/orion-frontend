@@ -6,7 +6,7 @@ import { ThemeService } from './core/theme/theme.service';
 @Component({
   selector: 'orion-root',
   imports: [RouterOutlet],
-  template: '<router-outlet data-cd-test="cache-hit-source-change" />',
+  template: '<router-outlet />',
 })
 export class App {
   // Instantiating the service here ensures the data-theme attribute is set
