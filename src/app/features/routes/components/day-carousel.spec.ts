@@ -3,7 +3,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { DayCarousel, type DayCarouselItem } from './day-carousel';
 import { FakeTranslateService } from '../../../core/i18n/fake-translate';
-import type { DailySummary } from '../../../core/types/my-routes.types';
+import type { DailySummary } from '../../../core/types/routes.types';
 
 const SUMMARIES: Record<string, DailySummary> = {
   '2026-07-21': {

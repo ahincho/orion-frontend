@@ -1,4 +1,8 @@
-<div class="flex gap-2 overflow-x-auto py-0.5" role="tablist" [attr.aria-label]="'routes.carousel.ariaLabel' | translate">
+<div
+  class="flex gap-2 overflow-x-auto py-0.5"
+  role="tablist"
+  [attr.aria-label]="'routes.carousel.ariaLabel' | translate"
+>
   @for (day of days(); track day.fecha) {
     <button
       type="button"

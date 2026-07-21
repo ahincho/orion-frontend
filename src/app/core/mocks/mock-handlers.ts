@@ -1,12 +1,9 @@
 import type { HttpRequest } from '@angular/common/http';
 
-import {
-  POLYGON_FIXTURES,
-  polygonsFeatureCollection,
-} from './fixtures/polygons.fixture';
+import { POLYGON_FIXTURES, polygonsFeatureCollection } from './fixtures/polygons.fixture';
 import { DISTRIBUTOR_FIXTURES } from './fixtures/distributors.fixture';
 import { SUPERVISOR_FIXTURES } from './fixtures/supervisors.fixture';
-import { MY_ROUTES_FIXTURE } from './fixtures/my-routes.fixture';
+import { ROUTES_FIXTURE } from './fixtures/routes.fixture';
 
 /**
  * Single registry entry: every mock URL handler the front-end falls back to
@@ -40,11 +37,7 @@ interface CreatedAssignmentBatch {
 const storedAssignments: CreatedAssignmentBatch[] = [];
 
 function readString(body: unknown, key: string): string | null {
-  if (
-    body !== null &&
-    typeof body === 'object' &&
-    key in (body as Record<string, unknown>)
-  ) {
+  if (body !== null && typeof body === 'object' && key in (body as Record<string, unknown>)) {
     const value = (body as Record<string, unknown>)[key];
     return typeof value === 'string' ? value : null;
   }
@@ -52,11 +45,7 @@ function readString(body: unknown, key: string): string | null {
 }
 
 function readNumber(body: unknown, key: string): number | null {
-  if (
-    body !== null &&
-    typeof body === 'object' &&
-    key in (body as Record<string, unknown>)
-  ) {
+  if (body !== null && typeof body === 'object' && key in (body as Record<string, unknown>)) {
     const value = (body as Record<string, unknown>)[key];
     return typeof value === 'number' ? value : null;
   }
@@ -126,17 +115,14 @@ export const mockBackendHandlers: readonly MockBackendHandler[] = [
     resolve: (request) => {
       const body = request.body as unknown;
       const id = `batch-${Date.now().toString(36)}`;
-      const polygons = Array.isArray(
-        (body as { polygons?: unknown }).polygons,
-      )
-        ? ((body as { polygons: unknown[] }).polygons.filter(
+      const polygons = Array.isArray((body as { polygons?: unknown }).polygons)
+        ? (body as { polygons: unknown[] }).polygons.filter(
             (id): id is string => typeof id === 'string',
-          ))
+          )
         : [];
       const supervisorId = readString(body, 'supervisorId') ?? '';
       const distributorId = readString(body, 'distributorId') ?? '';
-      const scheduledDate =
-        readString(body, 'scheduledDate') ?? new Date().toISOString();
+      const scheduledDate = readString(body, 'scheduledDate') ?? new Date().toISOString();
       const estimatedDurationMin = readNumber(body, 'estimatedDurationMin') ?? 0;
       const note = readString(body, 'note');
       const created: CreatedAssignmentBatch = {
@@ -163,6 +149,6 @@ export const mockBackendHandlers: readonly MockBackendHandler[] = [
     matchKind: 'exact',
     pattern: '/api/v1/routes',
     delayMs: 160,
-    resolve: () => MY_ROUTES_FIXTURE,
+    resolve: () => ROUTES_FIXTURE,
   },
 ];

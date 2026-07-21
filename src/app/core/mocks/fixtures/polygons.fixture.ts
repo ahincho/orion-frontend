@@ -1,7 +1,4 @@
-import type {
-  PolygonGeoJsonData,
-  PolygonInfoGeneral,
-} from '../../../core/types/assignment.types';
+import type { PolygonGeoJsonData, PolygonInfoGeneral } from '../../../core/types/assignment.types';
 import { classificationColor } from '../../../core/types/classification.types';
 import type { Feature, Polygon } from 'geojson';
 
@@ -11,11 +8,7 @@ import type { Feature, Polygon } from 'geojson';
  * readable. The starting point is duplicated at the end so the ring is
  * already closed.
  */
-function square(
-  lng: number,
-  lat: number,
-  half: number,
-): Feature<Polygon> {
+function square(lng: number, lat: number, half: number): Feature<Polygon> {
   return {
     type: 'Feature',
     properties: {},

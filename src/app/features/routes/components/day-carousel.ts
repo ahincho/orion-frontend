@@ -1,12 +1,7 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  input,
-  output,
-} from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 
-import type { DailySummary } from '../../../core/types/my-routes.types';
+import type { DailySummary } from '../../../core/types/routes.types';
 
 export interface DayCarouselItem {
   readonly fecha: string;
@@ -19,7 +14,6 @@ export interface DayCarouselItem {
   selector: 'orion-day-carousel',
   templateUrl: './day-carousel.html',
   host: { class: 'block' },
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [TranslatePipe],
 })
 export class DayCarousel {

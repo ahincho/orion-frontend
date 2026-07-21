@@ -5,7 +5,7 @@ import type {
   WeeklyAssignment,
   DailySummary,
   VendorSurvey,
-} from '../../../core/types/my-routes.types';
+} from '../../../core/types/routes.types';
 import { POLYGON_FIXTURES } from './polygons.fixture';
 
 const DEFAULT_USER_ID = 'vendor-001';
@@ -63,10 +63,7 @@ function vendorFor(
     status: index === 0 ? 'completed' : 'pending',
     notes: null,
     timeWindow: '08:00 - 12:00',
-    coordinates: [
-      center[0] + offset * 0.002,
-      center[1] + (offset % 2 === 0 ? 0.001 : -0.001),
-    ],
+    coordinates: [center[0] + offset * 0.002, center[1] + (offset % 2 === 0 ? 0.001 : -0.001)],
   };
 }
 
@@ -116,10 +113,7 @@ function buildWeeklyAssignment(
   };
 }
 
-function buildDailySummary(
-  polygonId: string,
-  offsetDays: number,
-): DailySummary {
+function buildDailySummary(polygonId: string, offsetDays: number): DailySummary {
   const polygon = POLYGON_FIXTURES.find((entry) => entry.id === polygonId);
   if (!polygon) {
     throw new Error(`polygon fixture missing: ${polygonId}`);
@@ -160,12 +154,11 @@ const WEEKLY_ASSIGNMENTS: readonly WeeklyAssignment[] = ROTATION.map(
   },
 );
 
-const DAILY_SUMMARIES: readonly DailySummary[] = ROTATION.map(
-  ({ polygonId, offsetDays }) =>
-    buildDailySummary(polygonId, offsetDays),
+const DAILY_SUMMARIES: readonly DailySummary[] = ROTATION.map(({ polygonId, offsetDays }) =>
+  buildDailySummary(polygonId, offsetDays),
 );
 
-export const MY_ROUTES_FIXTURE: WeeklyRoutesResponse = {
+export const ROUTES_FIXTURE: WeeklyRoutesResponse = {
   userId: DEFAULT_USER_ID,
   generatedAt: TODAY.toISOString(),
   summary: DAILY_SUMMARIES,

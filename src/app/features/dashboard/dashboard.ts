@@ -1,18 +1,19 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { AuthService } from '../../core/auth/auth.service';
 
 interface PillarCard {
   readonly path: string;
-  readonly title: string;
-  readonly description: string;
+  readonly titleKey: string;
+  readonly descriptionKey: string;
   readonly accent: string;
 }
 
 @Component({
   selector: 'orion-dashboard',
-  imports: [RouterLink],
+  imports: [RouterLink, TranslatePipe],
   host: { class: 'block h-full' },
   templateUrl: './dashboard.html',
 })
@@ -23,30 +24,26 @@ export class Dashboard {
   protected readonly pillars: readonly PillarCard[] = [
     {
       path: '/assignments',
-      title: 'Asignación de Censos',
-      description:
-        'Cruza nodos disponibles con cuotas y calendarios para proponer asignaciones de hogares a vendedores.',
+      titleKey: 'dashboard.pillars.assignments.title',
+      descriptionKey: 'dashboard.pillars.assignments.description',
       accent: 'bg-indigo-500',
     },
     {
       path: '/expansion',
-      title: 'Expansión de Redes',
-      description:
-        'Detecta oportunidades de expansión cruzando hogares sin cobertura con zonas de alta demanda.',
+      titleKey: 'dashboard.pillars.expansion.title',
+      descriptionKey: 'dashboard.pillars.expansion.description',
       accent: 'bg-emerald-500',
     },
     {
       path: '/maintenance',
-      title: 'Mantenimiento por Riesgo',
-      description:
-        'Prioriza intervenciones en nodos con historial de caídas y señales de saturación sistemática.',
+      titleKey: 'dashboard.pillars.maintenance.title',
+      descriptionKey: 'dashboard.pillars.maintenance.description',
       accent: 'bg-amber-500',
     },
     {
       path: '/post-sale',
-      title: 'Seguimiento Post-Venta',
-      description:
-        'Programa encuestas de seguimiento aplicando la política de hostigamiento comercial.',
+      titleKey: 'dashboard.pillars.postSale.title',
+      descriptionKey: 'dashboard.pillars.postSale.description',
       accent: 'bg-rose-500',
     },
   ];

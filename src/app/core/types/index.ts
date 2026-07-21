@@ -3,4 +3,4 @@ export * from './geo.utils';
 export * from './classification.types';
 export * from './technology.types';
 export * from './assignment.types';
-export * from './my-routes.types';
+export * from './routes.types';

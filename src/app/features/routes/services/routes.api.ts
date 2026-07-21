@@ -4,9 +4,9 @@ import type { Observable } from 'rxjs';
 
 import { HttpResultClient } from '../../../core/http/http-result.client';
 import type { Result } from '../../../core/http/result';
-import type { WeeklyRoutesResponse } from '../../../core/types/my-routes.types';
+import type { WeeklyRoutesResponse } from '../../../core/types/routes.types';
 
-export class MyRoutesApi {
+export class RoutesApi {
   private readonly client: HttpResultClient;
 
   constructor(http: HttpClient) {
@@ -18,6 +18,6 @@ export class MyRoutesApi {
   }
 }
 
-export function injectMyRoutesApi(): MyRoutesApi {
-  return new MyRoutesApi(inject(HttpClient));
+export function injectRoutesApi(): RoutesApi {
+  return new RoutesApi(inject(HttpClient));
 }
