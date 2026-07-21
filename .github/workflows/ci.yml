@@ -1,0 +1,110 @@
+# =============================================================================
+# CI - Lint & Test (orion-frontend)
+# =============================================================================
+# Pull request linter + test runner. Calls the ecosystem + node reusables
+# from `spark-match/spark-match-01-devops/.github/workflows/...` (all pinned
+# `@main` per AGENTS.md). Also runs the Angular unit tests via npm locally
+# because vitest is the unit-test runner for Angular 22 (not a reusable).
+#
+# Jobs:
+#   - actionlint   :: GH Actions syntax  (ecosystem)
+#   - gitleaks     :: secret history     (ecosystem)
+#   - yamllint     :: YAML lint          (ecosystem)
+#   - eslint       :: npm run lint       (node, angular-eslint flat config)
+#   - test         :: npm run test       (local: vitest via @angular/build:unit-test)
+#
+# Pin: @main. The reusables were promoted from @dev -> @main in
+# spark-match-01-devops PR #45 (end-to-end validated against
+# orion-infrastructure PR #24). We mirror that strategy here.
+# =============================================================================
+
+name: CI - Lint & Test
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# Cancel in-progress runs for the same PR + branch. Saves runner minutes on
+# rapid pushes. The cancel-in-progress: true is safe for lint jobs (idempotent).
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ---------- ecosystem reusables ------------------------------------------------
+
+  actionlint:
+    name: actionlint
+    uses: spark-match/spark-match-01-devops/.github/workflows/actionlint.yml@main
+    with:
+      environment-name: ci
+
+  gitleaks:
+    name: gitleaks
+    uses: spark-match/spark-match-01-devops/.github/workflows/gitleaks.yml@main
+    with:
+      environment-name: ci
+
+  yamllint:
+    name: yamllint
+    uses: spark-match/spark-match-01-devops/.github/workflows/yamllint.yml@main
+    with:
+      environment-name: ci
+
+  # ---------- node reusables -----------------------------------------------------
+
+  eslint:
+    name: eslint
+    uses: spark-match/spark-match-01-devops/.github/workflows/eslint.yml@main
+    with:
+      environment-name: ci
+      eslint-version: '9'
+      lint-script: lint
+      working-directory: '.'
+
+  # ---------- local: unit tests (vitest via @angular/build:unit-test) ----------
+  # Angular 22's unit-test builder is not yet exposed as a reusable from
+  # spark-match-01-devops, so we run it inline. The recipe is short and
+  # stable (npm ci -> npm run test -- --watch=false --browsers=ChromeHeadless
+  # via the @angular/build:unit-test builder).
+  test:
+    name: unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v6
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node24-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node24-
+
+      - name: Install dependencies
+        run: npm ci
+
+      # El prebuild hook genera src/environments/api-config.generated.ts
+      # a partir de API_URL. Los tests no llaman al backend, asi que
+      # dejamos API_URL vacio para que la config generada tenga "".
+      - name: Generate API config (prebuild hook)
+        run: npm run prebuild
+
+      - name: Run unit tests
+        # vitest es el runner de @angular/build:unit-test en Angular 22.
+        # --watch=false para que termine en CI. --run solo corre los tests
+        # sin modo watch.
+        run: npm test -- --watch=false --run
