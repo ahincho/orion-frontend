@@ -1,0 +1,64 @@
+<div
+  class="confirm-modal"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-label]="'assignments.confirm.ariaLabel' | translate"
+>
+  <header class="confirm-modal__header">
+    <h2 class="confirm-modal__title">
+      {{ 'assignments.confirm.title' | translate }}
+    </h2>
+    <p class="confirm-modal__subtitle">
+      {{ 'assignments.confirm.subtitle' | translate }}
+    </p>
+  </header>
+
+  <dl class="confirm-modal__grid">
+    <div>
+      <dt>{{ 'assignments.confirm.polygon' | translate }}</dt>
+      <dd>{{ context().polygon.codigo }} · {{ context().polygon.nombre }}</dd>
+    </div>
+    <div>
+      <dt>{{ 'assignments.confirm.distributor' | translate }}</dt>
+      <dd>{{ context().distribuidorName }}</dd>
+    </div>
+    <div>
+      <dt>{{ 'assignments.confirm.supervisor' | translate }}</dt>
+      <dd>{{ context().supervisorName }}</dd>
+    </div>
+    <div>
+      <dt>{{ 'assignments.confirm.date' | translate }}</dt>
+      <dd>{{ context().fechaProgramada }}</dd>
+    </div>
+    <div>
+      <dt>{{ 'assignments.confirm.duration' | translate }}</dt>
+      <dd>{{ context().duracionEstimadaMin }} min</dd>
+    </div>
+  </dl>
+
+  <label class="confirm-modal__field">
+    <span>{{ 'assignments.confirm.note' | translate }}</span>
+    <textarea
+      rows="3"
+      [value]="context().nota ?? ''"
+      (input)="onNoteChange($event)"
+    ></textarea>
+  </label>
+
+  <footer class="confirm-modal__footer">
+    <button
+      type="button"
+      class="confirm-modal__cancel"
+      (click)="cancelDialog.emit()"
+    >
+      {{ 'common.actions.cancel' | translate }}
+    </button>
+    <button
+      type="button"
+      class="confirm-modal__confirm"
+      (click)="submitForm.emit()"
+    >
+      {{ 'assignments.confirm.confirmAction' | translate }}
+    </button>
+  </footer>
+</div>

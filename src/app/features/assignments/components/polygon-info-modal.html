@@ -1,0 +1,61 @@
+<div
+  class="polygon-info-modal"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-label]="'assignments.modal.infoAriaLabel' | translate"
+>
+  <header class="polygon-info-modal__header">
+    <span class="polygon-info-modal__code">
+      {{ polygon().codigo }}
+    </span>
+    <h2 class="polygon-info-modal__name">
+      {{ polygon().nombre }}
+    </h2>
+  </header>
+
+  <dl class="polygon-info-modal__grid">
+    <div>
+      <dt>{{ 'assignments.modal.technology' | translate }}</dt>
+      <dd>{{ polygon().tecnologia }}</dd>
+    </div>
+    <div>
+      <dt>{{ 'assignments.modal.classification' | translate }}</dt>
+      <dd>{{ polygon().clasificacion }}</dd>
+    </div>
+    <div>
+      <dt>{{ 'assignments.modal.totalHouseholds' | translate }}</dt>
+      <dd>{{ polygon().totalHogares }}</dd>
+    </div>
+    <div>
+      <dt>{{ 'assignments.modal.withoutService' | translate }}</dt>
+      <dd>{{ polygon().hogaresSinServicio }}</dd>
+    </div>
+    <div>
+      <dt>{{ 'assignments.modal.lastAssignment' | translate }}</dt>
+      <dd>
+        @if (polygon().ultimaAsignacionFecha) {
+          {{ polygon().ultimaAsignacionFecha }}
+        } @else {
+          {{ 'assignments.modal.neverAssigned' | translate }}
+        }
+      </dd>
+    </div>
+  </dl>
+
+  <footer class="polygon-info-modal__footer">
+    <button
+      type="button"
+      class="polygon-info-modal__close"
+      (click)="onClose()"
+    >
+      {{ 'common.actions.close' | translate }}
+    </button>
+    <button
+      type="button"
+      class="polygon-info-modal__assign"
+      (click)="onAssign()"
+    >
+      {{ 'assignments.modal.assignAction' | translate }}
+    </button>
+  </footer>
+</div>
