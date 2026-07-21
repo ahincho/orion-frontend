@@ -57,15 +57,7 @@ export const routes: Routes = [
     ],
   },
   {
-    // TODO(spike): gate behind isDevMode() before any production exposure.
-    // For now this public route exists only to validate the map engine
-    // outside of the auth flow during PR-0a of the maps spike.
-    path: '__maps-spike',
-    loadChildren: () =>
-      import('./features/maps-spike/maps-spike.routes').then(
-        (m) => m.MAPS_SPIKE_ROUTES,
-      ),
-    title: 'ORION · Spike Mapas',
+    path: '**',
+    redirectTo: 'login',
   },
-  { path: '**', redirectTo: 'login' },
 ];
