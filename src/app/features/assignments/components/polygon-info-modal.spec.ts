@@ -18,8 +18,8 @@ const SAMPLE: PolygonInfoGeneral = {
   lastAssignmentDate: null,
 };
 
-function buttons(root: HTMLElement): NodeListOf<HTMLButtonElement> {
-  return root.querySelectorAll('button');
+function button(root: HTMLElement, testId: string): HTMLButtonElement | null {
+  return root.querySelector<HTMLButtonElement>(`[data-testid="${testId}"]`);
 }
 
 describe('PolygonInfoModal', () => {
@@ -39,10 +39,7 @@ describe('PolygonInfoModal', () => {
     fixture.componentInstance.assignPolygon.subscribe((entry) => {
       emitted = entry;
     });
-    const allButtons = buttons(fixture.nativeElement);
-    const assignButton = Array.from(allButtons).find((button) =>
-      button.classList.contains('polygon-info-modal__assign'),
-    );
+    const assignButton = button(fixture.nativeElement, 'polygon-info-modal-assign');
     expect(assignButton).toBeTruthy();
     assignButton?.click();
     expect(emitted).toEqual(SAMPLE);
@@ -57,9 +54,8 @@ describe('PolygonInfoModal', () => {
     fixture.componentInstance.dismiss.subscribe(() => {
       closed = true;
     });
-    const closeButton = Array.from(buttons(fixture.nativeElement)).find(
-      (button) => button.classList.contains('polygon-info-modal__close'),
-    );
+    const closeButton = button(fixture.nativeElement, 'polygon-info-modal-close');
+    expect(closeButton).toBeTruthy();
     closeButton?.click();
     expect(closed).toBe(true);
   });

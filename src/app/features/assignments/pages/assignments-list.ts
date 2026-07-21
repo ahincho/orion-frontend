@@ -52,8 +52,8 @@ const FREE_MAP_STYLE = 'https://tiles.openfreemap.org/styles/liberty';
 
 @Component({
   selector: 'orion-assignments-list',
+  host: { class: 'block h-full' },
   templateUrl: './assignments-list.html',
-  styleUrl: './assignments-list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MapShellComponent,

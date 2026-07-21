@@ -1,61 +1,84 @@
 <div
-  class="confirm-modal"
+  class="flex w-full max-w-xl flex-col gap-5 rounded-xl bg-white p-6 shadow-2xl shadow-slate-900/25 ring-1 ring-slate-900/10 dark:bg-slate-900 dark:ring-slate-100/10"
   role="dialog"
   aria-modal="true"
   [attr.aria-label]="'assignments.confirm.ariaLabel' | translate"
 >
-  <header class="confirm-modal__header">
-    <h2 class="confirm-modal__title">
+  <header class="flex flex-col gap-1">
+    <h2 class="m-0 text-lg font-semibold text-slate-900 dark:text-slate-100">
       {{ 'assignments.confirm.title' | translate }}
     </h2>
-    <p class="confirm-modal__subtitle">
+    <p class="m-0 text-sm text-slate-600 dark:text-slate-400">
       {{ 'assignments.confirm.subtitle' | translate }}
     </p>
   </header>
 
-  <dl class="confirm-modal__grid">
-    <div>
-      <dt>{{ 'assignments.confirm.polygon' | translate }}</dt>
-      <dd>{{ context().polygon.code }} · {{ context().polygon.name }}</dd>
+  <dl class="m-0 grid grid-cols-2 gap-x-4 gap-y-3">
+    <div class="flex flex-col gap-0.5">
+      <dt class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">
+        {{ 'assignments.confirm.polygon' | translate }}
+      </dt>
+      <dd class="m-0 text-sm font-medium text-slate-900 dark:text-slate-100">
+        {{ context().polygon.code }} · {{ context().polygon.name }}
+      </dd>
     </div>
-    <div>
-      <dt>{{ 'assignments.confirm.distributor' | translate }}</dt>
-      <dd>{{ context().distributorName }}</dd>
+    <div class="flex flex-col gap-0.5">
+      <dt class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">
+        {{ 'assignments.confirm.distributor' | translate }}
+      </dt>
+      <dd class="m-0 text-sm font-medium text-slate-900 dark:text-slate-100">
+        {{ context().distributorName }}
+      </dd>
     </div>
-    <div>
-      <dt>{{ 'assignments.confirm.supervisor' | translate }}</dt>
-      <dd>{{ context().supervisorName }}</dd>
+    <div class="flex flex-col gap-0.5">
+      <dt class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">
+        {{ 'assignments.confirm.supervisor' | translate }}
+      </dt>
+      <dd class="m-0 text-sm font-medium text-slate-900 dark:text-slate-100">
+        {{ context().supervisorName }}
+      </dd>
     </div>
-    <div>
-      <dt>{{ 'assignments.confirm.date' | translate }}</dt>
-      <dd>{{ context().scheduledDate }}</dd>
+    <div class="flex flex-col gap-0.5">
+      <dt class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">
+        {{ 'assignments.confirm.date' | translate }}
+      </dt>
+      <dd class="m-0 text-sm font-medium text-slate-900 dark:text-slate-100">
+        {{ context().scheduledDate }}
+      </dd>
     </div>
-    <div>
-      <dt>{{ 'assignments.confirm.duration' | translate }}</dt>
-      <dd>{{ context().estimatedDurationMin }} min</dd>
+    <div class="flex flex-col gap-0.5">
+      <dt class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">
+        {{ 'assignments.confirm.duration' | translate }}
+      </dt>
+      <dd class="m-0 text-sm font-medium text-slate-900 dark:text-slate-100">
+        {{ context().estimatedDurationMin }} min
+      </dd>
     </div>
   </dl>
 
-  <label class="confirm-modal__field">
+  <label class="flex flex-col gap-1 text-sm text-slate-700 dark:text-slate-300">
     <span>{{ 'assignments.confirm.note' | translate }}</span>
     <textarea
       rows="3"
+      class="resize-y rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100"
       [value]="context().note ?? ''"
       (input)="onNoteChange($event)"
     ></textarea>
   </label>
 
-  <footer class="confirm-modal__footer">
+  <footer class="flex justify-end gap-2">
     <button
       type="button"
-      class="confirm-modal__cancel"
+      data-testid="confirm-modal-cancel"
+      class="cursor-pointer rounded-md border border-slate-300 bg-slate-100 px-4 py-2 text-sm font-medium text-slate-900 transition-colors duration-150 hover:bg-slate-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
       (click)="cancelDialog.emit()"
     >
       {{ 'common.actions.cancel' | translate }}
     </button>
     <button
       type="button"
-      class="confirm-modal__confirm"
+      data-testid="confirm-modal-confirm"
+      class="cursor-pointer rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-400"
       (click)="submitForm.emit()"
     >
       {{ 'assignments.confirm.confirmAction' | translate }}

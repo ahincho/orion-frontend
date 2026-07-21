@@ -1,15 +1,20 @@
-<div class="day-carousel" role="tablist" [attr.aria-label]="'routes.carousel.ariaLabel' | translate">
+<div class="flex gap-2 overflow-x-auto py-0.5" role="tablist" [attr.aria-label]="'routes.carousel.ariaLabel' | translate">
   @for (day of days(); track day.fecha) {
     <button
       type="button"
       role="tab"
-      class="day-carousel__item"
-      [class.day-carousel__item--active]="day.fecha === selectedDate()"
+      data-testid="day-carousel-item"
+      class="flex w-28 shrink-0 cursor-pointer flex-col items-start gap-0.5 rounded-xl border border-slate-200 bg-white p-2 text-left transition-colors duration-150 hover:border-indigo-600 dark:border-slate-700 dark:bg-slate-800 dark:hover:border-indigo-400"
+      [class.!border-indigo-600]="day.fecha === selectedDate()"
+      [class.!bg-indigo-50]="day.fecha === selectedDate()"
+      [class.dark:!bg-indigo-950]="day.fecha === selectedDate()"
       [attr.aria-selected]="day.fecha === selectedDate()"
       (click)="onPick(day.fecha)"
     >
-      <span class="day-carousel__label">{{ day.label }}</span>
-        <span class="day-carousel__summary">
+      <span class="text-sm font-semibold text-slate-900 dark:text-slate-100">
+        {{ day.label }}
+      </span>
+      <span class="text-xs text-slate-500 dark:text-slate-400">
         @if (day.summary) {
           {{ day.summary.householdsCompleted }}/{{ day.summary.totalHouseholds }}
         } @else {

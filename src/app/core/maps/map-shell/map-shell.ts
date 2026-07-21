@@ -35,7 +35,7 @@ import maplibregl, {
 @Component({
   selector: 'orion-map-shell',
   templateUrl: './map-shell.html',
-  styleUrl: './map-shell.scss',
+  host: { class: 'relative block h-full w-full min-h-60' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapShellComponent implements AfterViewInit, OnDestroy {

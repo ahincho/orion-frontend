@@ -43,7 +43,7 @@ const FREE_MAP_STYLE = 'https://tiles.openfreemap.org/styles/liberty';
 @Component({
   selector: 'orion-my-routes-list',
   templateUrl: './my-routes-list.html',
-  styleUrl: './my-routes-list.scss',
+  host: { class: 'block h-full' },
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MapShellComponent,

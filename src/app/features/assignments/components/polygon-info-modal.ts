@@ -16,7 +16,7 @@ import type { PolygonInfoGeneral } from '../../../core/types/assignment.types';
 @Component({
   selector: 'orion-polygon-info-modal',
   templateUrl: './polygon-info-modal.html',
-  styleUrl: './polygon-info-modal.scss',
+  host: { class: 'block' },
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [TranslatePipe],
 })
