@@ -1,4 +1,4 @@
-import type { OnDestroy} from '@angular/core';
+import type { OnDestroy } from '@angular/core';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,18 +6,20 @@ import {
   effect,
   input,
   output,
-  signal
+  signal,
 } from '@angular/core';
 import {
   type GeoJSONSource,
   type Map as MapLibreMap,
+  type MapGeoJSONFeature,
   type MapLayerMouseEvent,
 } from 'maplibre-gl';
+import type { Feature, FeatureCollection, Geometry } from 'geojson';
 
 import type {
-  GeoJsonFeatureLike,
   GeoJsonInput,
   GeoJsonLayerStyle,
+  GeoJsonLayerStyleFn,
 } from '../map.types';
 
 const DEFAULT_STYLE: Required<GeoJsonLayerStyle> = {
@@ -61,13 +63,10 @@ export class GeoJsonLayerComponent implements OnDestroy {
   readonly strokeWidth = input<number>(DEFAULT_STYLE.strokeWidth);
   readonly strokeOpacity = input<number>(DEFAULT_STYLE.strokeOpacity);
   readonly interactive = input<boolean>(true);
-  readonly styleFn = input<
-    | ((feature: GeoJsonFeatureLike) => GeoJsonLayerStyle | undefined)
-    | undefined
-  >(undefined);
+  readonly styleFn = input<GeoJsonLayerStyleFn | undefined>(undefined);
 
-  readonly featureHover = output<GeoJsonFeatureLike | null>();
-  readonly featureClick = output<GeoJsonFeatureLike>();
+  readonly featureHover = output<Feature<Geometry> | null>();
+  readonly featureClick = output<Feature<Geometry>>();
 
   protected readonly sourceId = computed(() => `${this.id()}-source`);
   protected readonly fillLayerId = computed(() => `${this.id()}-fill`);
@@ -156,7 +155,7 @@ export class GeoJsonLayerComponent implements OnDestroy {
    * was provided. Useful for callers that need to resolve the same
    * color shown on the map (e.g. legend building).
    */
-  resolveStyle(feature: GeoJsonFeatureLike): GeoJsonLayerStyle | undefined {
+  resolveStyle(feature: Feature<Geometry>): GeoJsonLayerStyle | undefined {
     return this.styleFn()?.(feature);
   }
 
@@ -167,16 +166,16 @@ export class GeoJsonLayerComponent implements OnDestroy {
     const sourceId = this.sourceId();
     const fill = this.fillLayerId();
     const line = this.lineLayerId();
-    const features = normalizeToFeatureCollection(data);
+    const collection = normalizeToFeatureCollection(data);
 
     const existing = map.getSource(sourceId) as GeoJSONSource | undefined;
     if (existing) {
-      existing.setData(features);
-      this.indexFeatures(features.features);
+      existing.setData(collection);
+      this.indexFeatures(collection.features);
       return;
     }
     this.attachedMap.set(map);
-    map.addSource(sourceId, { type: 'geojson', data: features });
+    map.addSource(sourceId, { type: 'geojson', data: collection });
     map.addLayer({
       id: fill,
       type: 'fill',
@@ -196,10 +195,10 @@ export class GeoJsonLayerComponent implements OnDestroy {
         'line-opacity': this.strokeOpacity(),
       },
     });
-    this.indexFeatures(features.features);
+    this.indexFeatures(collection.features);
   }
 
-  private indexFeatures(features: readonly GeoJsonFeatureLike[]): void {
+  private indexFeatures(features: Feature<Geometry>[]): void {
     this.featureIndex.reset();
     for (const feature of features) {
       if (feature.id !== undefined) {
@@ -220,7 +219,7 @@ export class GeoJsonLayerComponent implements OnDestroy {
       if (!feature) {
         return;
       }
-      this.featureHover.emit(feature as GeoJsonFeatureLike);
+      this.featureHover.emit(toGeojsonFeature(feature));
     };
     this.leaveHandler = () => {
       this.featureHover.emit(null);
@@ -230,7 +229,7 @@ export class GeoJsonLayerComponent implements OnDestroy {
       if (!feature) {
         return;
       }
-      this.featureClick.emit(feature as GeoJsonFeatureLike);
+      this.featureClick.emit(toGeojsonFeature(feature));
     };
     map.on('mousemove', layerId, this.hoverHandler);
     map.on('mouseleave', layerId, this.leaveHandler);
@@ -259,36 +258,43 @@ export class GeoJsonLayerComponent implements OnDestroy {
 }
 
 class FeatureIndex {
-  private readonly byKey = new Map<string, GeoJsonFeatureLike>();
+  private readonly byKey = new Map<string, Feature<Geometry>>();
 
   reset(): void {
     this.byKey.clear();
   }
 
-  add(key: string, feature: GeoJsonFeatureLike): void {
+  add(key: string, feature: Feature<Geometry>): void {
     this.byKey.set(key, feature);
   }
 
-  get(key: string): GeoJsonFeatureLike | undefined {
+  get(key: string): Feature<Geometry> | undefined {
     return this.byKey.get(key);
   }
 }
 
-function normalizeToFeatureCollection(input: NonNullable<GeoJsonInput>): {
-  type: 'FeatureCollection';
-  features: readonly GeoJsonFeatureLike[];
-} {
+function normalizeToFeatureCollection(
+  input: NonNullable<GeoJsonInput>,
+): FeatureCollection<Geometry> {
   if (Array.isArray(input)) {
     return { type: 'FeatureCollection', features: input };
   }
   if ('type' in input && input.type === 'FeatureCollection') {
-    return input as {
-      type: 'FeatureCollection';
-      features: readonly GeoJsonFeatureLike[];
-    };
+    return input;
   }
+  return { type: 'FeatureCollection', features: [input] };
+}
+
+function toGeojsonFeature(eventFeature: MapGeoJSONFeature): Feature<Geometry> {
+  const geometry = eventFeature.geometry as Geometry;
+  const properties = (eventFeature.properties ?? {}) as Record<
+    string,
+    unknown
+  >;
   return {
-    type: 'FeatureCollection',
-    features: [input as GeoJsonFeatureLike],
+    type: 'Feature',
+    id: eventFeature.id,
+    geometry,
+    properties,
   };
 }

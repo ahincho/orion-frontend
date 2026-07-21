@@ -4,9 +4,7 @@ export { createMarker } from './create-marker';
 export type {
   GeoJsonLayerStyle,
   GeoJsonLayerStyleFn,
-  GeoJsonFeatureLike,
-  GeoJsonFeatureCollectionLike,
-  GeoJsonGeometryLike,
   GeoJsonInput,
   MapShellConfig,
 } from './map.types';
+export type { Feature, FeatureCollection, Geometry } from './map.types';
