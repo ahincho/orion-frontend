@@ -12,9 +12,9 @@
 #   - eslint       :: npm run lint       (node, angular-eslint flat config)
 #   - test         :: npm run test       (node, vitest via @angular/build)
 #
-# Pin: @main. The reusables were promoted from @dev -> @main in
-# spark-match-01-devops PR #45 (end-to-end validated against
-# orion-infrastructure PR #24). We mirror that strategy here.
+# Pin: @main. Consolidated via spark-match-01-devops PR #45 (end-to-end
+# validated against orion-infrastructure PR #24). Mirrors the
+# orion-infrastructure strategy.
 # =============================================================================
 
 name: CI - Lint & Test

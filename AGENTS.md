@@ -49,8 +49,8 @@ Forbidden:
 ## CI/CD
 
 - **Pin de reusables:** `spark-match/spark-match-01-devops@main` (alineado
-  con `orion-infrastructure`). Reusables fueron promovidos de `@dev` a
-  `@main` en spark-match PR #45 despues de validacion end-to-end.
+  con `orion-infrastructure`). Consolidado via spark-match PR #45 despues
+  de validacion end-to-end.
 - **CI:** `.github/workflows/ci.yml` corre en PR y push a `main`:
   - `actionlint`, `gitleaks`, `yamllint` (ecosystem reusables).
   - `eslint` (node reusable, angular-eslint v22 flat config).
